@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>島嶼圖鑑 Island Codex</title>
+    <title>島嶼圖鑑 TW</title>
 
     <!-- Leaflet 地圖套件 CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -14,6 +14,18 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/map.css">
     <link rel="stylesheet" href="css/components.css">
+
+    <head>
+        <!-- 引入 PWA Manifest -->
+        <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="#007bff">
+
+        <!-- iOS (Safari) 專用設定 -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
+        <link rel="apple-touch-icon" href="images/icon-192.png">
+    </head>
 </head>
 
 <body>
@@ -41,11 +53,20 @@
     <script src="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.js"></script>
     <script src="js/config.js"></script>
     <script src="js/theme.js"></script>
-    <script src="js/auth.js"></script>       <!-- 必須放在 components.js 之前 -->
+    <script src="js/auth.js"></script> <!-- 必須放在 components.js 之前 -->
     <script src="js/components.js"></script> <!-- 才能順利讀取getCurrentUser -->
     <script src="js/map.js"></script>
     <script src="js/cards.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker 註冊成功！', reg))
+                    .catch(err => console.error('Service Worker 註冊失敗：', err));
+            });
+        }
+    </script>
 </body>
 
 </html>
