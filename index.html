@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>島嶼圖鑑 Island Codex</title>
+
+    <!-- Leaflet 地圖套件 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet 全螢幕套件 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.css" />
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- 獨立頁首 -->
+        <div id="header-container"></div>
+
+        <!-- 主要內容區 -->
+        <main>
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
+
+            <div id="port-list"></div>
+        </main>
+
+        <!-- 獨立頁尾 -->
+        <div id="footer-container"></div>
+    </div>
+
+    <!-- Leaflet 地圖套件 JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet 全螢幕套件 JS -->
+    <script src="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>       <!-- 必須放在 components.js 之前 -->
+    <script src="js/components.js"></script> <!-- 才能順利讀取getCurrentUser -->
+    <script src="js/map.js"></script>
+    <script src="js/cards.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

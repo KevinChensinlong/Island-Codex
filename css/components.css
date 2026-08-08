@@ -1,0 +1,450 @@
+/* =========================================
+   組件樣式 (Header, Footer, Buttons, Cards)
+   ========================================= */
+
+/* 頁首與頁尾 */
+.site-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-body);
+  z-index: 1000;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 頁首樣式 */
+.site-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-body);
+  /* 與背景融合 */
+  z-index: 1000;
+  transition: background-color 0.15s ease;
+}
+
+.site-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* 頁尾樣式 */
+.site-footer {
+  text-align: center;
+  padding: 24px 16px 12px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* 按鈕樣式 */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+/* 卡片與列表樣式 */
+#port-list {
+  padding: 0 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.port-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.port-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.port-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.port-city {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.status-unvisited {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.status-visited {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.port-notes {
+  font-size: 14px;
+  color: var(--text-secondary);
+  background-color: var(--bg-body);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  line-height: 1.5;
+  transition: background-color 0.15s ease;
+}
+
+.port-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.port-photo-container {
+  display: none;
+  margin-top: 12px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.port-photo-container.show {
+  display: block;
+}
+
+.port-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+}
+
+/* 維基百科簡介區塊 */
+.wiki-container {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  background-color: var(--bg-body);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.wiki-container.show {
+  display: block;
+}
+
+.wiki-loading, .wiki-error {
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* 圖片容器：不設固定高度，維持原圖完整比例 */
+.wiki-photo-box {
+  margin-bottom: 12px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  width: 100%;
+}
+
+.wiki-photo-box img {
+  width: 100%;
+  height: auto; /* 自動依比例調整高度 */
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+.wiki-text {
+  color: var(--text-primary);
+  font-size: 13.5px;
+  text-align: justify;
+}
+
+/* 登入 Modal 樣式 */
+.auth-dialog {
+  border: none;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  margin: auto;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-color);
+}
+
+.auth-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.auth-modal-content h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.auth-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+/* 確保彈窗中的文字框與輸入框樣式統一 */
+.auth-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.15s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--accent-color);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.auth-footer p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.user-welcome {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-right: 8px;
+}
+
+/* 登入 Modal 增強 */
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.auth-tab.active {
+  color: var(--accent-color);
+  border-bottom-color: var(--accent-color);
+}
+
+.form-group {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.auth-input:focus {
+  border-color: var(--accent-color);
+}
+
+.auth-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* 提示訊息容器 */
+.auth-msg {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  margin: 12px 0; /* 上下加上適當間距 */
+  text-align: center;
+  line-height: 1.4;
+  box-sizing: border-box;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* 錯誤提示 (紅底淺紅字) */
+.auth-msg.error {
+  background-color: rgba(220, 53, 69, 0.12);
+  color: #ff6b6b;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+/* 成功提示 (綠底淺綠字) */
+.auth-msg.success {
+  background-color: rgba(40, 167, 69, 0.12);
+  color: #51cf66;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 維基百科圖片優化樣式 */
+.wiki-photo-box img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  display: block;
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* 1. 預設低畫質縮圖：提示可點擊、Hover 降低明亮度/深度 */
+.wiki-photo-box img.wiki-thumb-img {
+  cursor: pointer;
+}
+
+.wiki-photo-box img.wiki-thumb-img:hover {
+  filter: brightness(0.95); /* 滑鼠移上去時明亮度降低（變暗深度下降） */
+  opacity: 0.99;
+}
+
+/* 2. 已載入高畫質原圖：恢復原始深度、取消 Hover 變色與手型指標 */
+.wiki-photo-box img.is-high-res {
+  cursor: default;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* 統一 Modal 內按鈕與卡片按鈕樣式 */
+#checkin-dialog .btn,
+#auth-dialog .btn {
+  border-radius: var(--radius-sm);  /* 統一圓角 */
+  padding: 8px 16px;                 /* 統一按鈕上下左右邊距 */
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  box-shadow: none;                  /* 移除多餘陰影 */
+}
+
+/* 確保藍色主要按鈕背景色完全一致 */
+#checkin-dialog .btn-primary,
+#auth-dialog .btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border: none;
+}
+
+#checkin-dialog .btn-primary:hover,
+#auth-dialog .btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* 1. 確保彈窗底部的按鈕容器採用 Flexbox 並垂直置中對齊 */
+.auth-actions {
+  display: flex;
+  align-items: center; /* 關鍵：讓子元素垂直置中 */
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* 2. 重置取消按鈕多餘的上邊距 (margin-top) */
+.auth-actions .btn-text {
+  margin-top: 0;
+  padding: 8px 12px; /* 增加點擊範圍並保持高度比例 */
+}
