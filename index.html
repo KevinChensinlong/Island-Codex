@@ -15,17 +15,15 @@
     <link rel="stylesheet" href="css/map.css">
     <link rel="stylesheet" href="css/components.css">
 
-    <head>
-        <!-- 引入 PWA Manifest -->
-        <link rel="manifest" href="manifest.json">
-        <meta name="theme-color" content="#007bff">
+    <!-- 引入 PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
 
-        <!-- iOS (Safari) 專用設定 -->
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
-        <link rel="apple-touch-icon" href="images/icon-192.png">
-    </head>
+    <!-- iOS (Safari) 專用設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
 </head>
 
 <body>
@@ -40,6 +38,15 @@
                 <div id="map"></div>
             </div>
 
+            <!-- 載入進度條區域 -->
+            <div id="loading-progress-container" class="progress-wrapper" style="display: none;">
+                <p id="progress-text">資料載入中，請稍候...</p>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <!-- 港口卡片列表區域 -->
             <div id="port-list"></div>
         </main>
 
@@ -54,7 +61,7 @@
     <script src="js/config.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/auth.js"></script> <!-- 必須放在 components.js 之前 -->
-    <script src="js/components.js"></script> <!-- 才能順利讀取getCurrentUser -->
+    <script src="js/components.js"></script> <!-- 才能順利讀取 getCurrentUser -->
     <script src="js/map.js"></script>
     <script src="js/cards.js"></script>
     <script src="js/app.js"></script>

@@ -1,28 +1,34 @@
 // 渲染獨立頁首 (包含登入狀態)
 function renderHeader() {
-  const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
+  const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null; // cite: 6
   
   const headerHTML = `
     <header class="site-header">
       <div class="logo-area">
-        <h1>島嶼圖鑑</h1>
+        <h1>島嶼圖鑑 TW</h1>
       </div>
       <div class="header-actions">
         ${currentUser ? `
-            <span class="user-welcome">您好！ ${currentUser.name || currentUser.account}　</span>
+            <span class="user-welcome">您好！ ${currentUser.name || currentUser.account} </span>
             <button class="btn btn-secondary" onclick="logoutUser()">登出</button>
         ` : `
             <button class="btn btn-primary" onclick="openAuthModal('login')">登入 / 註冊</button>
         `}
-        <button class="btn btn-secondary" onclick="toggleTheme()" id="theme-toggle-btn">深色模式</button>
+        <!-- 將按鈕內預設的「深色模式」字串清除 -->
+        <button class="btn btn-secondary" onclick="toggleTheme()" id="theme-toggle-btn"></button>
       </div>
     </header>
-  `;
+  `; // cite: 6
   
-  const container = document.getElementById('header-container');
-  if (container) {
-    container.innerHTML = headerHTML;
-  }
+  const container = document.getElementById('header-container'); // cite: 6
+  if (container) { // cite: 6
+    container.innerHTML = headerHTML; // cite: 6
+    
+    // 渲染完 DOM 後，立即初始化主題狀態並寫入正確的按鈕文字
+    if (typeof initTheme === 'function') {
+      initTheme();
+    }
+  } // cite: 6
 }
 
 // 渲染獨立頁尾

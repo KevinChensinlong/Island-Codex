@@ -448,3 +448,35 @@
   margin-top: 0;
   padding: 8px 12px; /* 增加點擊範圍並保持高度比例 */
 }
+
+/* 進度條外層容器 */
+.progress-wrapper {
+  margin: 20px auto;
+  max-width: 400px;
+  text-align: center;
+  padding: 15px;
+}
+
+#progress-text {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #666);
+}
+
+/* 進度條軌道 */
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* 進度條填滿動畫 */
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
+}
