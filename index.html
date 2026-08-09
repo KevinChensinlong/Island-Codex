@@ -46,6 +46,37 @@
                 </div>
             </div>
 
+            <!-- 搜尋與多重篩選器區域 -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="filter-control search-input" 
+                        placeholder="搜尋港口名稱或說明..." 
+                        oninput="handleSearchAndFilter()"
+                    />
+                </div>
+                <div class="filter-controls-group">
+                    <!-- 縣市選單 -->
+                    <select id="countyFilter" class="filter-control filter-select" onchange="handleCountyChange()">
+                        <option value="all">全部縣市</option>
+                    </select>
+
+                    <!-- 鄉鎮市區選單 -->
+<select id="townFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
+    <option value="all">全部鄉鎮市區</option>
+</select>
+
+                    <!-- 踩點狀態選單 -->
+                    <select id="statusFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
+                        <option value="all">全部狀態</option>
+                        <option value="visited">已踩點</option>
+                        <option value="unvisited">未踩點</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- 港口卡片列表區域 -->
             <div id="port-list"></div>
         </main>
@@ -60,8 +91,8 @@
     <script src="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.js"></script>
     <script src="js/config.js"></script>
     <script src="js/theme.js"></script>
-    <script src="js/auth.js"></script> <!-- 必須放在 components.js 之前 -->
-    <script src="js/components.js"></script> <!-- 才能順利讀取 getCurrentUser -->
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
     <script src="js/map.js"></script>
     <script src="js/cards.js"></script>
     <script src="js/app.js"></script>

@@ -1,6 +1,10 @@
+/**
+ * 島嶼圖鑑 Island Codex - 元件與打卡彈窗模組 (components.js)
+ */
+
 // 渲染獨立頁首 (包含登入狀態)
 function renderHeader() {
-  const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null; // cite: 6
+  const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
   
   const headerHTML = `
     <header class="site-header">
@@ -18,17 +22,17 @@ function renderHeader() {
         <button class="btn btn-secondary" onclick="toggleTheme()" id="theme-toggle-btn"></button>
       </div>
     </header>
-  `; // cite: 6
+  `;
   
-  const container = document.getElementById('header-container'); // cite: 6
-  if (container) { // cite: 6
-    container.innerHTML = headerHTML; // cite: 6
+  const container = document.getElementById('header-container');
+  if (container) {
+    container.innerHTML = headerHTML;
     
     // 渲染完 DOM 後，立即初始化主題狀態並寫入正確的按鈕文字
     if (typeof initTheme === 'function') {
       initTheme();
     }
-  } // cite: 6
+  }
 }
 
 // 渲染獨立頁尾
@@ -108,19 +112,6 @@ function renderAuthModal() {
   `;
 }
 
-// 頁面載入完成後執行
-document.addEventListener('DOMContentLoaded', () => {
-  renderHeader();
-  renderFooter();
-  renderAuthModal();
-});
-
-// 自動調整 textarea 高度的輔助函式
-function autoResizeTextarea(textarea) {
-  textarea.style.height = 'auto';
-  textarea.style.height = (textarea.scrollHeight) + 'px';
-}
-
 // 自動調整 textarea 高度的輔助函式
 function autoResizeTextarea(textarea) {
   if (!textarea) return;
@@ -130,50 +121,36 @@ function autoResizeTextarea(textarea) {
 
 // 開啟打卡 Modal
 function openCheckinModal(spotId, spotName) {
-    const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null; // cite: 6
-    if (!currentUser) { // cite: 6
-        if (typeof openAuthModal === 'function') { // cite: 6
-            openAuthModal('login'); // cite: 6
+    const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    if (!currentUser) {
+        if (typeof openAuthModal === 'function') {
+            openAuthModal('login');
         } else {
-            alert('請先登入會員再進行打卡！'); // cite: 6
+            alert('請先登入會員再進行打卡！');
         }
-        return; // cite: 6
+        return;
     }
 
-    // --- 1. 尋找舊筆記與造訪日期 ---
+    // 尋找該使用者對該景點的舊筆記與造訪日期
     let existingNote = '';
     let existingDate = new Date().toISOString().split('T')[0]; // 預設今日
 
-    // 優先從 window.latestCheckins 快取中比對該景點
-    if (window.latestCheckins && Array.isArray(window.latestCheckins)) {
-        const record = window.latestCheckins.find(c => String(c.spotId) === String(spotId));
-        if (record) {
-            if (record.note) existingNote = record.note;
-            if (record.visitedDate) existingDate = record.visitedDate;
-        }
-    } 
-    // 若全域變數未命中，嘗試直接從 DOM 卡片內容萃取舊筆記（雙重保險）
-    else {
-        const cardElem = document.getElementById(`port-card-${spotId}`);
-        if (cardElem) {
-            const noteElem = cardElem.querySelector('.port-notes');
-            if (noteElem) {
-                // 擷取「我的筆記：」之後的文字
-                const fullText = noteElem.innerText || noteElem.textContent;
-                const match = fullText.match(/我的筆記：\s*([\s\S]*?)(?=\n造訪日期|$)/);
-                if (match && match[1]) {
-                    existingNote = match[1].trim();
-                }
-            }
-        }
+    const checkins = (window.AppState && window.AppState.checkins) || window.allCheckinRecords || [];
+    const record = checkins.findLast ?
+      checkins.findLast(c => String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account)) :
+      checkins.filter(c => String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account)).pop();
+
+    if (record) {
+      if (record.note) existingNote = record.note;
+      if (record.visitedDate) existingDate = record.visitedDate;
     }
 
-    let dialog = document.getElementById('checkin-dialog'); // cite: 6
-    if (!dialog) { // cite: 6
-        dialog = document.createElement('dialog'); // cite: 6
-        dialog.id = 'checkin-dialog'; // cite: 6
-        dialog.className = 'auth-dialog'; // cite: 6
-        document.body.appendChild(dialog); // cite: 6
+    let dialog = document.getElementById('checkin-dialog');
+    if (!dialog) {
+        dialog = document.createElement('dialog');
+        dialog.id = 'checkin-dialog';
+        dialog.className = 'auth-dialog';
+        document.body.appendChild(dialog);
     }
 
     dialog.innerHTML = `
@@ -205,21 +182,20 @@ function openCheckinModal(spotId, spotName) {
           </div>
         </form>
       </div>
-    `; // cite: 6
+    `;
 
-    dialog.showModal(); // cite: 6
+    dialog.showModal();
 
-    // --- 2. 開啟 Modal 後立即調整一次框高 ---
     const noteTextarea = document.getElementById('checkin-note');
     if (noteTextarea) {
         autoResizeTextarea(noteTextarea);
     }
 }
 
-// 處理打卡表單提交 (背景寫入 Google Form)
+// 處理打卡表單提交 (背景寫入 Google Form 並更新全域狀態)
 async function handleCheckinSubmit(event, spotId) {
     event.preventDefault();
-    const currentUser = getCurrentUser();
+    const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
     if (!currentUser) return;
 
     const dateVal = document.getElementById('checkin-date')?.value;
@@ -270,6 +246,25 @@ async function handleCheckinSubmit(event, spotId) {
         tempForm.submit();
         document.body.removeChild(tempForm);
 
+        // --- 同步更新本地與全域打卡紀錄 ---
+        const newRecord = {
+            spotId: String(spotId),
+            userId: String(currentUser.account),
+            account: String(currentUser.account),
+            note: noteVal,
+            visitedDate: dateVal
+        };
+
+        window.AppState = window.AppState || {};
+        if (!Array.isArray(window.AppState.checkins)) window.AppState.checkins = [];
+
+        // 蓋掉該使用者的舊打卡紀錄並加入新紀錄
+        window.AppState.checkins = window.AppState.checkins.filter(
+            c => !(String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account))
+        );
+        window.AppState.checkins.push(newRecord);
+        window.allCheckinRecords = window.AppState.checkins; // 備份同步
+
         if (msgBox) {
             msgBox.textContent = "打卡成功！資料已寫入雲端。";
             msgBox.className = "auth-msg success";
@@ -278,8 +273,13 @@ async function handleCheckinSubmit(event, spotId) {
 
         setTimeout(() => {
             document.getElementById('checkin-dialog')?.close();
-            // 重新初始化應用程式以更新地圖與卡片
-            if (typeof initApp === 'function') initApp();
+            
+            // 即時觸發搜尋過濾器更新畫面
+            if (typeof handleSearchAndFilter === 'function') {
+                handleSearchAndFilter();
+            } else if (typeof renderCards === 'function') {
+                renderCards(window.AppState.allPorts || [], window.AppState.checkins);
+            }
         }, 1200);
 
     } catch (err) {
@@ -296,34 +296,9 @@ async function handleCheckinSubmit(event, spotId) {
     }
 }
 
-// 優先從全域打卡紀錄中，從「後方（最新）」開始找
-if (window.allCheckinRecords && Array.isArray(window.allCheckinRecords)) {
-    // 使用 findLast 從陣列尾端往回搜尋
-    const record = window.allCheckinRecords.findLast(
-        c => String(c.spotId) === String(spotId) && String(c.userId) === String(currentUser.account)
-    );
-    if (record) {
-        if (record.note) existingNote = record.note;
-        if (record.visitedDate) existingDate = record.visitedDate;
-    }
-}
-
-// === 在打卡成功儲存後，加入以下幾行 ===
-
-// 1. 確保全域打卡陣列同步更新（若尚無陣列則初始化）
-if (!window.allCheckinRecords) {
-    window.allCheckinRecords = [];
-}
-
-// 移除舊的打卡紀錄（如果有的話），並放入最新打卡資料
-window.allCheckinRecords = window.allCheckinRecords.filter(
-    c => !(String(c.spotId) === String(newRecord.spotId) && String(c.userId) === String(newRecord.userId))
-);
-window.allCheckinRecords.push(newRecord); // newRecord 為你剛打卡建立的物件
-
-// 2. 觸發搜尋與篩選，讓卡片列表重新依最新狀態繪製
-if (typeof handleSearchAndFilter === 'function') {
-    handleSearchAndFilter();
-} else if (typeof renderCards === 'function') {
-    renderCards(window.allPorts || window.portsData || [], window.allCheckinRecords);
-}
+// 頁面載入完成後執行
+document.addEventListener('DOMContentLoaded', () => {
+  renderHeader();
+  renderFooter();
+  renderAuthModal();
+});

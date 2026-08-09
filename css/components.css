@@ -482,69 +482,97 @@
 }
 
 /* ==========================================
-   搜尋框與篩選器樣式 (Search & Filter Bar)
+   搜尋與多重篩選器樣式 (Search & Multi-Filter)
    ========================================== */
-.search-filter-bar {
-  display: flex;
-  gap: 12px;
+.search-filter-container {
   max-width: 800px;
   margin: 16px auto;
   padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   box-sizing: border-box;
 }
 
 .search-box {
-  flex: 1;
-}
-
-.filter-box {
-  width: 130px;
-}
-
-.search-input,
-.filter-select {
   width: 100%;
+}
+
+.filter-controls-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.filter-control {
   height: 42px;
   padding: 0 12px;
   border: 1px solid var(--border-color, #dcdfe6);
   border-radius: var(--radius-sm, 8px);
   background-color: var(--bg-card, #ffffff);
-  
-  /* 關鍵修改：確保深色/淺色模式下文字都清晰可見 */
   color: var(--text-primary, #1a1a1a) !important;
   font-size: 14px;
   font-weight: 500;
   box-sizing: border-box;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
 }
 
-/* Placeholder (提示文字) 顏色微調 */
+.search-input {
+  width: 100%;
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 0; /* 防止下拉選單在 flex 佈局下溢出 */
+  cursor: pointer;
+}
+
 .search-input::placeholder {
   color: var(--text-secondary, #888888);
   opacity: 0.8;
 }
 
 .search-input:focus,
-.filter-select:focus {
+.filter-select:focus:not(:disabled) {
   border-color: var(--accent-color, #007bff);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-/* 手機端寬度自動微調 */
-@media (max-width: 480px) {
-  .search-filter-bar {
-    gap: 8px;
+/* 按鈕踩點狀態樣式 */
+.checkin-btn.visited,
+.checkin-btn.is-visited {
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+  border-color: #28a745 !important;
+}
+
+/* 手機直向適應 (螢幕寬度小於 600px 時改為兩欄/堆疊) */
+@media (max-width: 600px) {
+  .search-filter-container {
     padding: 0 12px;
+    margin: 12px auto;
   }
-  
-  .filter-box {
-    width: 110px;
+
+  .filter-controls-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
-  
-  .search-input,
-  .filter-select {
+
+  .filter-control {
+    height: 38px;
     font-size: 13px;
-    padding: 0 8px;
+    padding: 0 6px;
   }
+}
+
+/* 強制鄉鎮市區選單不論在任何時間點均維持統一深色外觀，絕不反灰 */
+#townFilter,
+#townFilter:disabled {
+  background-color: var(--bg-card, #ffffff) !important;
+  color: var(--text-primary, #1a1a1a) !important;
+  border-color: var(--border-color, #dcdfe6) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
 }

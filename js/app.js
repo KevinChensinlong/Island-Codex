@@ -45,16 +45,14 @@ function startTrickleProgress(startPercent = 40, statusText = "連線雲端資�
     
     smoothProgressInterval = setInterval(() => {
         if (current < 85) {
-            // 前期：較快的速度升到 85%
             current += Math.random() * 3 + 1; 
         } else if (current < 99) {
-            // 後期（超過 85%）：越接近 99% 爬得越慢，無限趨近但絕不達到 100%
             const remaining = 99 - current;
             current += remaining * 0.08; 
         }
 
         if (current >= 99) {
-            current = 99; // 封頂 99%（獻給網路極差的情況 哈哈）
+            current = 99; 
         }
 
         updateProgress(current, statusText);
@@ -72,14 +70,14 @@ function stopTrickleProgress() {
 // 1. 載入 ports.json
 async function loadPortsData() {
     try {
-        const res = await fetch('./data/ports.json?v=' + new Date().getTime()); // cite: 4
-        if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`); // cite: 4
-        const data = await res.json(); // cite: 4
-        window.portsData = data; // cite: 4
-        return data; // cite: 4
+        const res = await fetch('./data/ports.json?v=' + new Date().getTime());
+        if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`);
+        const data = await res.json();
+        window.portsData = data;
+        return data;
     } catch (err) {
-        console.error("無法載入 ports.json：", err); // cite: 4
-        return []; // cite: 4
+        console.error("無法載入 ports.json：", err);
+        return [];
     }
 }
 
@@ -89,54 +87,65 @@ async function initApp() {
     updateProgress(15, "讀取景點清單...");
 
     // 階段 1：下載 ports.json
-    const ports = await loadPortsData(); // cite: 4
+    const ports = await loadPortsData();
     updateProgress(40, "驗證使用者狀態...");
 
-    const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null; // cite: 4
+    const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
     let userCheckins = [];
 
     // 階段 2：同步個人打卡紀錄
-    if (currentUser && currentUser.account) { // cite: 4
-        // 💡 啟動欺騙性動態進度：一路爬到 85%，之後開啟極慢蠕動直到 99%
+    if (currentUser && currentUser.account) {
         startTrickleProgress(40, `同步 ${currentUser.name || currentUser.account} 的打卡紀錄...`);
 
         try {
             const hasValidApiUrl = typeof CONFIG !== 'undefined' && 
                                    CONFIG.apiUrl && 
-                                   !CONFIG.apiUrl.includes("https://script.google.com/macros/s/AKfycbwDjV3oGTBGdQOgKNCkCJZUc-_SRzehbNFeHQeJD6AT-_jJ3-XW86N54Lmtk4zJvA2W/exec"); // cite: 4
+                                   !CONFIG.apiUrl.includes("https://script.google.com/macros/s/AKfycbwDjV3oGTBGdQOgKNCkCJZUc-_SRzehbNFeHQeJD6AT-_jJ3-XW86N54Lmtk4zJvA2W/exec");
 
-            if (hasValidApiUrl) { // cite: 4
-                const requestUrl = `${CONFIG.apiUrl}?action=getUserData&account=${encodeURIComponent(currentUser.account)}&t=${Date.now()}`; // cite: 4
-                const controller = new AbortController(); // cite: 4
-                const timeoutId = setTimeout(() => controller.abort(), 8000); // 延長至 8 秒防極差網路
+            if (hasValidApiUrl) {
+                const requestUrl = `${CONFIG.apiUrl}?action=getUserData&account=${encodeURIComponent(currentUser.account)}&t=${Date.now()}`;
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-                const res = await fetch(requestUrl, { signal: controller.signal }); // cite: 4
-                clearTimeout(timeoutId); // cite: 4
+                const res = await fetch(requestUrl, { signal: controller.signal });
+                clearTimeout(timeoutId);
 
-                const data = await res.json(); // cite: 4
-                if (data.success && Array.isArray(data.records)) { // cite: 4
-                    userCheckins = data.records; // cite: 4
+                const data = await res.json();
+                if (data.success && Array.isArray(data.records)) {
+                    userCheckins = data.records;
                 }
             }
         } catch (err) {
-            console.error("讀取個人打卡資料失敗：", err); // cite: 4
+            console.error("讀取個人打卡資料失敗：", err);
         } finally {
-            // API 收到資料（或失敗）後，立即停止計時器
             stopTrickleProgress();
         }
     }
 
-    window.currentUserCheckins = userCheckins; // cite: 4
+    window.currentUserCheckins = userCheckins;
 
-    // 階段 3：資料到位！一口氣爆發到 100% 渲染畫面
-    updateProgress(98, "繪製地圖與景點卡片...");
+    // 階段 3：寫入全域 AppState 與初始化搜尋選單
+    window.AppState = window.AppState || {};
+    window.AppState.allPorts = ports;
+    window.AppState.checkins = userCheckins;
 
-    if (typeof renderMapMarkers === 'function') { // cite: 4
-        renderMapMarkers(ports, userCheckins); // cite: 4
+    // 初始化縣市與鄉鎮選單
+    if (typeof initFilterOptions === 'function') {
+        initFilterOptions(ports);
     }
 
-    if (typeof renderCards === 'function') { // cite: 4
-        renderCards(ports, userCheckins); // cite: 4
+    updateProgress(98, "繪製地圖與景點卡片...");
+
+    // 階段 4：渲染地圖標記與卡片
+    if (typeof renderMapMarkers === 'function') {
+        renderMapMarkers(ports, userCheckins);
+    }
+
+    // 優先執行四條件搜尋過濾，若無則降級為預設渲染
+    if (typeof handleSearchAndFilter === 'function') {
+        handleSearchAndFilter();
+    } else if (typeof renderCards === 'function') {
+        renderCards(ports, userCheckins);
     }
 
     // 完成！
@@ -145,9 +154,9 @@ async function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initApp(); // cite: 4
+    initApp();
 });
 
 async function onLoginSuccess() {
-    await initApp(); // cite: 4
+    await initApp();
 }
