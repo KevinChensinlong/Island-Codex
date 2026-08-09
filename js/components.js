@@ -307,3 +307,23 @@ if (window.allCheckinRecords && Array.isArray(window.allCheckinRecords)) {
         if (record.visitedDate) existingDate = record.visitedDate;
     }
 }
+
+// === 在打卡成功儲存後，加入以下幾行 ===
+
+// 1. 確保全域打卡陣列同步更新（若尚無陣列則初始化）
+if (!window.allCheckinRecords) {
+    window.allCheckinRecords = [];
+}
+
+// 移除舊的打卡紀錄（如果有的話），並放入最新打卡資料
+window.allCheckinRecords = window.allCheckinRecords.filter(
+    c => !(String(c.spotId) === String(newRecord.spotId) && String(c.userId) === String(newRecord.userId))
+);
+window.allCheckinRecords.push(newRecord); // newRecord 為你剛打卡建立的物件
+
+// 2. 觸發搜尋與篩選，讓卡片列表重新依最新狀態繪製
+if (typeof handleSearchAndFilter === 'function') {
+    handleSearchAndFilter();
+} else if (typeof renderCards === 'function') {
+    renderCards(window.allPorts || window.portsData || [], window.allCheckinRecords);
+}
