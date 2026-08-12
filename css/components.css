@@ -576,3 +576,124 @@
   opacity: 1 !important;
   cursor: pointer !important;
 }
+
+/* 品牌標題區域：確保圖片與文字在同一行並垂直置中 */
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 圖片與文字之間的間距 */
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* 調整 Logo 縮圖尺寸與樣式 */
+.brand-logo {
+  width: 28px;            /* 縮小寬度（可依喜好微調為 24px - 32px） */
+  height: 28px;           /* 縮小高度 */
+  border-radius: 20%;     /* 裁切為圓形 */
+  object-fit: cover;      /* 確保圖片不變形 */
+  flex-shrink: 0;         /* 避免被壓縮 */
+  display: inline-block;
+}
+
+/* 定位按鈕樣式 */
+.locate-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  width: 36px;
+  height: 36px;
+  background-color: var(--bg-card, #1e1e1e);
+  color: var(--text-primary, #ffffff);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-sm, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.locate-btn:hover {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+}
+
+/* 使用者定位藍點樣式 */
+.user-location-dot {
+  width: 14px;
+  height: 14px;
+  background-color: #007bff;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.8);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(0, 123, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
+/* ==========================================
+   最近港口卡片專用樣式 (與搜尋欄及卡片對齊)
+   ========================================== */
+
+/* 外層容器：確保最大寬度與左右 Padding 與搜尋欄一致 */
+.nearest-port-container {
+  max-width: 800px;
+  margin: 16px auto 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* 卡片本身樣式 */
+.nearest-port-card {
+  margin-bottom: 0;
+}
+
+/* 頂部佈局：將資訊與距離標籤分開左右兩側 */
+.nearest-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nearest-badge-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 「距離您最近港口」藍色主題標籤 */
+.nearest-tag {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0084ff;
+  margin-bottom: 2px;
+}
+
+/* 距離數字藍色圓框膠囊 */
+.nearest-dist-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0084ff;
+  background-color: rgba(0, 123, 255, 0.12);
+  border: 1px solid rgba(0, 123, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* 手機版適應 (與搜尋欄齊平) */
+@media (max-width: 600px) {
+  .nearest-port-container {
+    padding: 0 12px;
+    margin-top: 12px;
+  }
+}

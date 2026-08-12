@@ -19,7 +19,6 @@ function parseLocation(spot) {
     return { county: spot.county || '', town: spot.town || spot.district || '' };
   }
 
-  // 若資料庫內已有明確拆分好的 town / district，就直接使用；否則切前 3 個字
   const county = rawLoc.length >= 3 ? rawLoc.substring(0, 3) : rawLoc;
   const town = spot.town || spot.district || (rawLoc.length > 3 ? rawLoc.substring(3) : '');
 
@@ -37,7 +36,6 @@ function initFilterOptions(ports) {
   const countySelect = document.getElementById('countyFilter');
   if (!countySelect) return;
 
-  // 提取不重複的縣市名單
   const counties = [...new Set(ports.map(p => parseLocation(p).county).filter(Boolean))];
   
   countySelect.innerHTML = '<option value="all">全部縣市</option>';
@@ -49,12 +47,11 @@ function initFilterOptions(ports) {
     countySelect.appendChild(opt);
   });
 
-  // 初始化鄉鎮市區（預設載入全台所有鄉鎮）
   populateTownFilter('all');
 }
 
 /**
- * 根據選擇的縣市動態填入鄉鎮市區選項（絕不反灰停用）
+ * 根據選擇的縣市動態填入鄉鎮市區選項
  */
 function populateTownFilter(selectedCounty = 'all') {
   const townSelect = document.getElementById('townFilter');
@@ -62,12 +59,10 @@ function populateTownFilter(selectedCounty = 'all') {
 
   const sourceData = (window.AppState && window.AppState.allPorts) || [];
 
-  // 如果選擇「全部縣市」，就取全台所有景點；否則只取該縣市的景點
   const targetPorts = (selectedCounty === 'all') 
     ? sourceData 
     : sourceData.filter(p => parseLocation(p).county === selectedCounty);
 
-  // 提取不重複的鄉鎮市區並排序
   const towns = [...new Set(targetPorts.map(p => parseLocation(p).town).filter(Boolean))].sort();
 
   const currentSelectedTown = townSelect.value;
@@ -80,10 +75,8 @@ function populateTownFilter(selectedCounty = 'all') {
     townSelect.appendChild(opt);
   });
 
-  // 強制保持啟用狀態，維持質感統一的深色外觀
   townSelect.disabled = false;
 
-  // 切換縣市時，若原本選取的鄉鎮仍在新選單中就保留，否則歸零為「全部鄉鎮市區」
   if (towns.includes(currentSelectedTown)) {
     townSelect.value = currentSelectedTown;
   } else {
@@ -98,10 +91,7 @@ function handleCountyChange() {
   const countySelect = document.getElementById('countyFilter');
   if (!countySelect) return;
 
-  // 根據選擇的縣市更新鄉鎮選單內容
   populateTownFilter(countySelect.value);
-
-  // 執行過濾
   handleSearchAndFilter();
 }
 
@@ -119,7 +109,6 @@ function handleSearchAndFilter() {
   const selectedTown = townFilter ? townFilter.value : 'all';
   const selectedStatus = statusFilter ? statusFilter.value : 'all';
 
-  // 取得全域資料 (雙重保險相容舊變數)
   const sourceData = (window.AppState && window.AppState.allPorts && window.AppState.allPorts.length > 0) 
     ? window.AppState.allPorts 
     : (window.portsData || window.allPorts || []);
@@ -130,23 +119,17 @@ function handleSearchAndFilter() {
     
   const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
 
-  // 四條件交集過濾 (AND 邏輯)
   const filteredData = sourceData.filter(spot => {
     const currentSpotId = String(spot.id || spot.spotId || '');
     const { county: spotCounty, town: spotTown } = parseLocation(spot);
 
-    // 條件 1: 關鍵字 (搜尋名稱、備註或說明)
     const nameStr = (spot.name || '').toLowerCase();
     const descStr = (spot.description || '').toLowerCase();
     const matchesKeyword = !keyword || nameStr.includes(keyword) || descStr.includes(keyword);
 
-    // 條件 2: 縣市比對 (精準比對前 3 字)
     const matchesCounty = selectedCounty === 'all' || spotCounty === selectedCounty;
-
-    // 條件 3: 鄉鎮市區比對 (精準比對第 4 字以後)
     const matchesTown = selectedTown === 'all' || spotTown === selectedTown;
 
-    // 條件 4: 踩點狀態比對 (相容 spotId/id 與使用者驗證)
     const isVisited = checkins.some(c => {
       const recordSpotId = String(c.spotId || c.id || '');
       const matchSpot = recordSpotId === currentSpotId;
@@ -164,17 +147,15 @@ function handleSearchAndFilter() {
     return matchesKeyword && matchesCounty && matchesTown && matchesStatus;
   });
 
-  // 渲染過濾後的卡片列表
   renderCards(filteredData, checkins);
 
-  // 同步更新地圖標記
   if (typeof updateMapMarkers === 'function') {
     updateMapMarkers(filteredData);
   }
 }
 
 /**
- * 4. 核心港口卡片渲染 (保持原始美麗 UI 結構)
+ * 4. 核心港口卡片渲染
  */
 function renderCards(portsData = [], userCheckins = []) {
   const cardsContainer = document.getElementById('port-list');
@@ -191,15 +172,13 @@ function renderCards(portsData = [], userCheckins = []) {
     return;
   }
 
-  cardsContainer.innerHTML = ports.map(spot => {
+  const cardsHTML = ports.map(spot => {
     const currentSpotId = String(spot.id || spot.spotId || '');
 
-    // 比對踩點紀錄
     const matchingRecords = checkins.filter(c => String(c.spotId || c.id || '') === currentSpotId);
-    const userRecord = matchingRecords.pop(); // 取最新的一筆紀錄
+    const userRecord = matchingRecords.pop();
     const isVisited = !!userRecord;
 
-    // 解析城市與鄉鎮資訊顯示
     const { county, town } = parseLocation(spot);
     const locationText = `${county} ${town}`.trim();
 
@@ -230,13 +209,14 @@ function renderCards(portsData = [], userCheckins = []) {
           </button>
         </div>
 
-        <!-- 維基百科動態載入容器 -->
         <div class="wiki-container" id="wiki-box-${currentSpotId}">
           <div class="wiki-loading">正在載入維基百科資料...</div>
         </div>
       </div>
     `;
   }).join('');
+
+  cardsContainer.innerHTML = cardsHTML;
 }
 
 // 點擊地圖定位

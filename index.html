@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>島嶼圖鑑 TW</title>
 
+    <!-- 1. 網頁頁籤圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="images/icon-192.jpg">
+    <!-- 2. Apple iOS 裝置主畫面圖示 (選填，提升手機體驗) -->
+    <link rel="apple-touch-icon" href="images/icon-192.jpg">
+
     <!-- Leaflet 地圖套件 CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Leaflet 全螢幕套件 CSS -->
@@ -34,41 +39,44 @@
 
         <!-- 主要內容區 -->
         <main>
-            <div id="map-container">
+            <!-- 1. 地圖容器區域 -->
+            <div id="map-container" style="position: relative;">
                 <div id="map"></div>
-            </div>
-
-            <!-- 載入進度條區域 -->
-            <div id="loading-progress-container" class="progress-wrapper" style="display: none;">
-                <p id="progress-text">資料載入中，請稍候...</p>
-                <div class="progress-bar-bg">
-                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                <div id="loading-progress-container" class="progress-wrapper" style="display: none;">
+                    <p id="progress-text">資料載入中，請稍候...</p>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 搜尋與多重篩選器區域 -->
+            <!-- 2. 最近港口卡片區域（搜尋欄上方，獨立外層容器） -->
+            <div class="nearest-port-container">
+                <div id="nearestPortCard" class="port-card nearest-port-card" style="display: none;">
+                    <div class="nearest-card-header">
+                        <div class="nearest-badge-group">
+                            <span class="nearest-tag">距離您最近港口</span>
+                            <h3 id="nearestPortName" class="port-title">載入中...</h3>
+                            <p id="nearestPortDesc" class="port-city">--</p>
+                        </div>
+                        <span id="nearestDistance" class="nearest-dist-badge">-- km</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 搜尋與多重篩選器區域 -->
             <div class="search-filter-container">
                 <div class="search-box">
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="filter-control search-input" 
-                        placeholder="搜尋港口名稱或說明..." 
-                        oninput="handleSearchAndFilter()"
-                    />
+                    <input type="text" id="searchInput" class="filter-control search-input" placeholder="搜尋港口名稱或說明..."
+                        oninput="handleSearchAndFilter()" />
                 </div>
                 <div class="filter-controls-group">
-                    <!-- 縣市選單 -->
                     <select id="countyFilter" class="filter-control filter-select" onchange="handleCountyChange()">
                         <option value="all">全部縣市</option>
                     </select>
-
-                    <!-- 鄉鎮市區選單 -->
-<select id="townFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
-    <option value="all">全部鄉鎮市區</option>
-</select>
-
-                    <!-- 踩點狀態選單 -->
+                    <select id="townFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
+                        <option value="all">全部鄉鎮市區</option>
+                    </select>
                     <select id="statusFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
                         <option value="all">全部狀態</option>
                         <option value="visited">已踩點</option>
@@ -77,7 +85,7 @@
                 </div>
             </div>
 
-            <!-- 港口卡片列表區域 -->
+            <!-- 4. 港口卡片列表區域 -->
             <div id="port-list"></div>
         </main>
 
@@ -104,6 +112,49 @@
                     .catch(err => console.error('Service Worker 註冊失敗：', err));
             });
         }
+    </script>
+
+    <script>
+        function setRoundedFavicon(iconUrl, borderRadiusRatio = 0.2) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = iconUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = img.width || 128;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                const radius = size * borderRadiusRatio; // 計算 20% 圓角半徑
+
+                // 使用 Path 畫出 20% 圓角的矩形裁切區域
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(size, 0, size, size, radius);
+                ctx.arcTo(size, size, 0, size, radius);
+                ctx.arcTo(0, size, 0, 0, radius);
+                ctx.arcTo(0, 0, size, 0, radius);
+                ctx.closePath();
+                ctx.clip();
+
+                // 繪製圖片
+                ctx.drawImage(img, 0, 0, size, size);
+
+                // 替換或新增頁籤 Favicon 連結
+                let link = document.querySelector("link[rel*='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+        }
+
+        // 傳入圖片路徑，第二個參數 0.2 代表 20% 圓角
+        setRoundedFavicon('images/icon-192.jpg', 0.25);
     </script>
 </body>
 
