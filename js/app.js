@@ -157,37 +157,25 @@ function updateNearestPortUI(nearestPort, distance) {
     const descEl = document.getElementById('nearestPortDesc');
     const distEl = document.getElementById('nearestDistance');
 
-    if (nearestPort && card) {
-        // 印出物件結構，方便在 F12 開發者工具觀察真正的 key 叫什麼
-        console.log('最近港口資料物件：', nearestPort);
+    if (!nearestPort || !card) return;
 
-        if (nameEl) nameEl.textContent = nearestPort.name;
+    // 1. 設定名稱與距離
+    if (nameEl) nameEl.textContent = nearestPort.name;
+    if (distEl) distEl.textContent = `${distance.toFixed(1)} km`;
 
-        if (descEl) {
-            // 盡可能抓出任何可能包含地點字串的欄位
-            const rawLoc = String(
-                nearestPort.county || 
-                nearestPort.city || 
-                nearestPort.location || 
-                nearestPort.region || 
-                ''
-            ).trim();
-
-            // 如果字串長度大於 3（例如 "新北市八里區"），強制切開並補上全角中文空格 （顯眼效果更好）
-            if (rawLoc.length > 3) {
-                const countyStr = rawLoc.substring(0, 3);
-                const townStr = rawLoc.substring(3);
-                descEl.textContent = `${countyStr} ${townStr}`;
-            } else if (nearestPort.county && nearestPort.town) {
-                // 若剛好有獨立欄位
-                descEl.textContent = `${nearestPort.county} ${nearestPort.town}`;
-            } else {
-                descEl.textContent = rawLoc;
-            }
+    // 2. 使用 cards.js 的 parseLocation 解析地址並加上空格
+    if (descEl) {
+        if (typeof parseLocation === 'function') {
+            const { county, town } = parseLocation(nearestPort);
+            descEl.textContent = `${county} ${town}`.trim();
+        } else {
+            // 後備切分邏輯（前 3 個字為縣市）
+            const rawLoc = nearestPort.county || nearestPort.city || nearestPort.location || '';
+            descEl.textContent = rawLoc.length > 3 
+                ? `${rawLoc.substring(0, 3)} ${rawLoc.substring(3)}` 
+                : rawLoc;
         }
-
-        if (distEl) distEl.textContent = `${distance.toFixed(1)} km`;
-
-        card.style.display = 'block';
     }
+
+    card.style.display = 'block';
 }

@@ -99,14 +99,12 @@ function getSphericalDistance(lat1, lon1, lat2, lon2) {
  * 根據使用者位置找出最近的港口並更新 UI 卡片
  */
 function updateNearestPortCard(userLat, userLng) {
-  // 取得全域港口資料 (兼顧 AppState 或全域變數)
   const ports = (window.AppState && window.AppState.allPorts) || window.allPortsData || [];
   if (!ports || ports.length === 0) return;
 
   let nearestPort = null;
   let minDistance = Infinity;
 
-  // 尋找直線距離最近的港口
   ports.forEach(spot => {
     if (spot.lat && spot.lng) {
       const dist = getSphericalDistance(userLat, userLng, Number(spot.lat), Number(spot.lng));
@@ -117,7 +115,6 @@ function updateNearestPortCard(userLat, userLng) {
     }
   });
 
-  // 更新卡片內容
   if (nearestPort) {
     const card = document.getElementById('nearestPortCard');
     const nameEl = document.getElementById('nearestPortName');
@@ -127,16 +124,23 @@ function updateNearestPortCard(userLat, userLng) {
     if (card && nameEl && descEl && distEl) {
       nameEl.textContent = nearestPort.name || '未知港口';
       
-      const cityText = nearestPort.city || nearestPort.county || '';
-      const townText = nearestPort.town || nearestPort.district || '';
-      descEl.textContent = `${cityText} ${townText}`.trim() || '台灣區域';
+      // 使用 parseLocation 自動解析拆分縣市與鄉鎮，並補上空格
+      if (typeof parseLocation === 'function') {
+        const { county, town } = parseLocation(nearestPort);
+        descEl.textContent = `${county} ${town}`.trim();
+      } else {
+        const rawLoc = nearestPort.city || nearestPort.county || '';
+        descEl.textContent = rawLoc.length > 3 
+          ? `${rawLoc.substring(0, 3)} ${rawLoc.substring(3)}` 
+          : rawLoc;
+      }
 
-      // 距離小於 1 公里顯示公尺，大於 1 公里顯示公里
+      // 距離顯示處理
       distEl.textContent = minDistance < 1 
-        ? `${Math.round(minDistance * 1000)} m (直線距離)` 
-        : `${minDistance.toFixed(1)} km (直線距離)`;
+        ? `${Math.round(minDistance * 1000)} m` 
+        : `${minDistance.toFixed(1)} km`;
 
-      card.style.display = 'block'; // 顯示卡片
+      card.style.display = 'block';
     }
   }
 }
@@ -156,10 +160,8 @@ function getUserLocation() {
 
       if (!map) initMap();
 
-      // 移動地圖中心至使用者位置 (Zoom 級別 17 詳細視角)
       map.setView([latitude, longitude], 17);
 
-      // 自訂藍點 Marker
       const userIcon = L.divIcon({
         className: 'custom-user-dot',
         html: '<div class="user-location-dot"></div>',
@@ -167,17 +169,14 @@ function getUserLocation() {
         iconAnchor: [9, 9]
       });
 
-      // 移除先前的定位點
       if (userLocationMarker) {
         map.removeLayer(userLocationMarker);
       }
 
-      // 標註當前位置並開啟彈窗
       userLocationMarker = L.marker([latitude, longitude], { icon: userIcon })
         .bindPopup('<b>您的位置</b>')
         .addTo(map);
 
-      // 自動計算並顯示最近的港口卡片
       updateNearestPortCard(latitude, longitude);
     },
     (error) => {
@@ -230,9 +229,16 @@ function renderMapMarkers(portsData = [], userCheckins = []) {
       icon: createDotIcon(isVisited)
     });
 
-    const displayCity = spot.city || spot.county || spot.region || '';
-    const displayTown = spot.town || spot.district || '';
-    const locationText = `${displayCity} ${displayTown}`.trim();
+    // 這裡同步修正地圖 Popup 的顯示，讓彈窗文字也帶有空格
+    let locationText = '';
+    if (typeof parseLocation === 'function') {
+      const { county, town } = parseLocation(spot);
+      locationText = `${county} ${town}`.trim();
+    } else {
+      const displayCity = spot.city || spot.county || spot.region || '';
+      const displayTown = spot.town || spot.district || '';
+      locationText = `${displayCity} ${displayTown}`.trim();
+    }
 
     const popupContent = `
       <div style="text-align: center; font-family: sans-serif; padding: 4px;">
@@ -254,62 +260,3 @@ window.updateMapMarkers = renderMapMarkers;
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
 });
-
-/**
- * 計算兩點經緯度之間的直線距離 (公里 km)
- */
-function getSphericalDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // 地球平均半徑 (km)
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-/**
- * 根據使用者位置找出最近的港口並更新 UI 卡片
- */
-function updateNearestPortCard(userLat, userLng) {
-  // 取得全域港口資料 (請確保 AppState.allPorts 或 window.allPortsData 存在)
-  const ports = (window.AppState && window.AppState.allPorts) || window.allPortsData || [];
-  if (!ports || ports.length === 0) return;
-
-  let nearestPort = null;
-  let minDistance = Infinity;
-
-  ports.forEach(spot => {
-    if (spot.lat && spot.lng) {
-      const dist = getSphericalDistance(userLat, userLng, spot.lat, spot.lng);
-      if (dist < minDistance) {
-        minDistance = dist;
-        nearestPort = spot;
-      }
-    }
-  });
-
-  if (nearestPort) {
-    const card = document.getElementById('nearestPortCard');
-    const nameEl = document.getElementById('nearestPortName');
-    const descEl = document.getElementById('nearestPortDesc');
-    const distEl = document.getElementById('nearestDistance');
-
-    if (card && nameEl && descEl && distEl) {
-      nameEl.textContent = nearestPort.name;
-      
-      const cityText = nearestPort.city || nearestPort.county || '';
-      const townText = nearestPort.town || nearestPort.district || '';
-      descEl.textContent = `${cityText} ${townText}`.trim() || '台灣區域';
-
-      // 距離保留一位小數
-      distEl.textContent = minDistance < 1 
-        ? `${Math.round(minDistance * 1000)} m ` 
-        : `${minDistance.toFixed(1)} km `;
-
-      card.style.display = 'block'; // 顯示卡片
-    }
-  }
-}
