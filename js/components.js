@@ -2,28 +2,37 @@
  * 島嶼圖鑑 Island Codex - 元件與打卡彈窗模組 (components.js)
  */
 
-// 渲染獨立頁首 (包含登入狀態)
+// 渲染獨立頁首 (包含登入狀態與分頁頁籤)
 function renderHeader() {
   const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
+  // 透過網址判斷目前是否在「臺鐵車站」頁面
+  const isStationPage = window.location.pathname.includes('stations.html');
 
   const headerHTML = `
-    <header class="site-header">
-      <div class="logo-area">
-        <h1 class="brand-title">
-         <img src="images/icon-512.jpg" alt="Logo" class="brand-logo">
-              島嶼圖鑑 <span>TW</span>
-        </h1>
+    <header class="site-header-wrapper">
+      <div class="site-header">
+        <div class="logo-area">
+          <h1 class="brand-title">
+            <img src="images/icon-512.jpg" alt="Logo" class="brand-logo">
+            島嶼圖鑑 <span>TW</span>
+          </h1>
+        </div>
+        <div class="header-actions">
+          ${currentUser ? `
+              <span class="user-welcome">您好！ ${currentUser.name || currentUser.account} </span>
+              <button class="btn btn-secondary" onclick="logoutUser()">登出</button>
+          ` : `
+              <button class="btn btn-primary" onclick="openAuthModal('login')">登入 / 註冊</button>
+          `}
+          <button class="btn btn-secondary" onclick="toggleTheme()" id="theme-toggle-btn"></button>
+        </div>
       </div>
-      <div class="header-actions">
-        ${currentUser ? `
-            <span class="user-welcome">您好！ ${currentUser.name || currentUser.account} </span>
-            <button class="btn btn-secondary" onclick="logoutUser()">登出</button>
-        ` : `
-            <button class="btn btn-primary" onclick="openAuthModal('login')">登入 / 註冊</button>
-        `}
-        <!-- 將按鈕內預設的「深色模式」字串清除 -->
-        <button class="btn btn-secondary" onclick="toggleTheme()" id="theme-toggle-btn"></button>
-      </div>
+
+      <!-- 頂部分頁切換頁籤 -->
+      <nav class="page-nav-tabs">
+        <a href="index.html" class="nav-tab ${!isStationPage ? 'active' : ''}">港口圖鑑</a>
+        <a href="stations.html" class="nav-tab ${isStationPage ? 'active' : ''}">臺鐵車站圖鑑</a>
+      </nav>
     </header>
   `;
 

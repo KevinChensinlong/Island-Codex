@@ -2,6 +2,9 @@
  * 島嶼圖鑑 Island Codex - 主應用程式入口 (app.js)
  */
 
+// 判斷當前頁面類型（若網址包含 stations.html 則為車站頁面，否則為港口頁面）
+const PAGE_TYPE = window.location.pathname.includes('stations.html') ? 'station' : 'port';
+
 window.currentUserCheckins = [];
 window.portsData = [];
 
@@ -65,22 +68,25 @@ function stopTrickleProgress() {
     }
 }
 
+// 動態載入 JSON 資料（根據頁面類型自動讀取 ports.json 或 TR_station.json）
 async function loadPortsData() {
+    const jsonPath = PAGE_TYPE === 'station' ? './data/TR_station.json' : './data/ports.json';
     try {
-        const res = await fetch('./data/ports.json?v=' + new Date().getTime());
+        const res = await fetch(`${jsonPath}?v=${new Date().getTime()}`);
         if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`);
         const data = await res.json();
         window.portsData = data;
         return data;
     } catch (err) {
-        console.error("無法載入 ports.json：", err);
+        console.error(`無法載入 ${jsonPath}：`, err);
         return [];
     }
 }
 
 async function initApp() {
     stopTrickleProgress();
-    updateProgress(15, "讀取景點清單...");
+    const targetLabel = PAGE_TYPE === 'station' ? '車站' : '景點';
+    updateProgress(15, `讀取${targetLabel}清單...`);
 
     const ports = await loadPortsData();
     updateProgress(40, "驗證使用者狀態...");
@@ -126,7 +132,7 @@ async function initApp() {
         initFilterOptions(ports);
     }
 
-    updateProgress(98, "繪製地圖與景點卡片...");
+    updateProgress(98, `繪製地圖與${targetLabel}卡片...`);
 
     if (typeof renderMapMarkers === 'function') {
         renderMapMarkers(ports, userCheckins);
@@ -143,6 +149,10 @@ async function initApp() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 確保獨立 Header & Footer 模組能正常掛載
+    if (typeof renderHeader === 'function') renderHeader();
+    if (typeof renderFooter === 'function') renderFooter();
+
     initApp();
 });
 
@@ -150,7 +160,7 @@ async function onLoginSuccess() {
     await initApp();
 }
 
-// 計算出最近港口後的渲染邏輯
+// 計算出最近地點後的渲染邏輯
 function updateNearestPortUI(nearestPort, distance) {
     const card = document.getElementById('nearestPortCard');
     const nameEl = document.getElementById('nearestPortName');

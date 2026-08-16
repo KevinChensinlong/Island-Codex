@@ -10,7 +10,7 @@ window.AppState = window.AppState || {
 
 /**
  * 輔助函式：自動解析縣市與鄉鎮市區
- * 前 3 個字為縣市，第 4 個字以後為鄉鎮市區
+ * 支援港口（county/location）與車站（city）格式
  */
 function parseLocation(spot) {
   const rawLoc = spot.city || spot.county || spot.region || spot.location || '';
@@ -19,6 +19,15 @@ function parseLocation(spot) {
     return { county: spot.county || '', town: spot.town || spot.district || '' };
   }
 
+  // 若為車站格式「XX縣/市 YY區/鄉/鎮/市」（例：臺北市中正區）
+  const countyMatch = rawLoc.match(/^(..[縣市])/);
+  if (countyMatch) {
+    const county = countyMatch[1];
+    const town = spot.town || spot.district || rawLoc.replace(county, '').trim();
+    return { county, town };
+  }
+
+  // 原始港口預設邏輯：前 3 個字為縣市，第 4 個字以後為鄉鎮市區
   const county = rawLoc.length >= 3 ? rawLoc.substring(0, 3) : rawLoc;
   const town = spot.town || spot.district || (rawLoc.length > 3 ? rawLoc.substring(3) : '');
 
@@ -26,7 +35,7 @@ function parseLocation(spot) {
 }
 
 /**
- * 1. 初始化縣市與鄉鎮市區下拉選單選項 (載入 ports.json 後呼叫)
+ * 1. 初始化縣市與鄉鎮市區下拉選單選項 (載入 ports.json 或 TR_station.json 後呼叫)
  */
 function initFilterOptions(ports) {
   if (!ports || !Array.isArray(ports)) return;
@@ -125,7 +134,9 @@ function handleSearchAndFilter() {
 
     const nameStr = (spot.name || '').toLowerCase();
     const descStr = (spot.description || '').toLowerCase();
-    const matchesKeyword = !keyword || nameStr.includes(keyword) || descStr.includes(keyword);
+    const lineStr = (spot.line || '').toLowerCase(); // 支援多路線關鍵字搜尋
+
+    const matchesKeyword = !keyword || nameStr.includes(keyword) || descStr.includes(keyword) || lineStr.includes(keyword);
 
     const matchesCounty = selectedCounty === 'all' || spotCounty === selectedCounty;
     const matchesTown = selectedTown === 'all' || spotTown === selectedTown;
@@ -155,7 +166,7 @@ function handleSearchAndFilter() {
 }
 
 /**
- * 4. 核心港口卡片渲染
+ * 4. 核心港口/車站卡片渲染
  */
 function renderCards(portsData = [], userCheckins = []) {
   const cardsContainer = document.getElementById('port-list');
@@ -168,7 +179,7 @@ function renderCards(portsData = [], userCheckins = []) {
   const ports = Array.isArray(portsData) ? portsData : [];
 
   if (ports.length === 0) {
-    cardsContainer.innerHTML = `<div class="no-data" style="text-align:center; padding: 40px 20px; color: #888;">查無符合條件的港口資料。</div>`;
+    cardsContainer.innerHTML = `<div class="no-data" style="text-align:center; padding: 40px 20px; color: #888;">查無符合條件的資料。</div>`;
     return;
   }
 
@@ -182,6 +193,17 @@ function renderCards(portsData = [], userCheckins = []) {
     const { county, town } = parseLocation(spot);
     const locationText = `${county} ${town}`.trim();
 
+    // 支援以全形空格或半形空格分隔多條路線
+    let linesHTML = '';
+    if (spot.line) {
+      const lines = spot.line.split(/[\s\u3000]+/).filter(Boolean);
+      linesHTML = lines.map(lineName => `
+        <span class="tag line-tag" style="display: inline-block; padding: 5px 10px; font-size: 0.75rem; background: rgba(255, 196, 0, 0.09); color: #ffbd06; border-radius: 12px; font-weight: 600; margin-right: 4px; margin-bottom: 4px;">
+          ${lineName}
+        </span>
+      `).join('');
+    }
+
     return `
       <div class="port-card ${isVisited ? 'visited' : ''}" id="port-card-${currentSpotId}">
         <div class="port-header">
@@ -193,6 +215,12 @@ function renderCards(portsData = [], userCheckins = []) {
             ${isVisited ? '✓ 已踩點' : '未踩點'}
           </span>
         </div>
+
+        ${linesHTML ? `
+          <div class="port-tags" style="margin: 6px 0; display: flex; flex-wrap: wrap;">
+            ${linesHTML}
+          </div>
+        ` : ''}
 
         ${isVisited && userRecord.note ? `
           <div class="port-notes">
