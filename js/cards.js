@@ -222,10 +222,17 @@ function renderCards(portsData = [], userCheckins = []) {
           </div>
         ` : ''}
 
-        ${isVisited && userRecord.note ? `
-          <div class="port-notes">
-            <strong>我的筆記：</strong> ${userRecord.note}
-            ${userRecord.visitedDate ? `<div style="font-size: 0.75rem; color: #888; margin-top: 4px;">造訪日期：${userRecord.visitedDate}</div>` : ''}
+        ${isVisited && (userRecord.note || userRecord.visitedDate) ? `
+          <div class="port-notes" style="margin-top: 8px;">
+            ${userRecord.note ? `
+              <div style="font-weight: bold; margin-bottom: 4px;">我的筆記：</div>
+              <div style="white-space: pre-wrap; line-height: 1.5; color: var(--text-main);">${userRecord.note}</div>
+            ` : ''}
+            ${userRecord.visitedDate ? `
+              <div style="font-size: 0.75rem; color: #888; margin-top: ${userRecord.note ? '8px' : '0'};">
+                造訪日期：${userRecord.visitedDate}
+              </div>
+            ` : ''}
           </div>
         ` : ''}
 

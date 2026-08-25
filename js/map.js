@@ -1,5 +1,5 @@
 /**
- * 島嶼圖鑑 Island Codex - 地圖模組 (map.js)
+ * 島嶼圖鑑 Island Codex - 地圖模組 (map.js) [效能加速版]
  */
 
 let map = null;
@@ -18,19 +18,23 @@ const createDotIcon = (isVisited) => {
   });
 };
 
-// 初始化地圖
+// 初始化地圖 (已加入效能優化參數)
 function initMap() {
   if (map !== null) return;
 
-  // 1. 初始化地圖，關閉預設左上角縮放按鈕
+  // 1. 初始化地圖，關閉動畫以提升載入與滑動反應速度
   map = L.map('map', {
-    zoomControl: false,       // 停用預設左上角縮放
-    fullscreenControl: false  // 停用自動初始化
+    zoomControl: false,          // 停用預設左上角縮放
+    fullscreenControl: false,     // 停用自動初始化
+    fadeAnimation: true,         // 【恢復動畫】讓 Popup 彈窗恢復優雅的淡入淡出效果
+    zoomAnimation: true,
+    markerZoomAnimation: true,
+    preferCanvas: true           // 【保留高效能】繼續使用 Canvas 渲染上百個點位，滑動依然流暢
   }).setView([23.8, 120.96], 7);
 
-  // 2. 建立 Leaflet 自訂定位控制項，讓按鈕與其他原生地圖控制項完美一體化
+  // 2. 建立 Leaflet 自訂定位控制項
   const LocateControl = L.Control.extend({
-    options: { position: 'bottomright' }, // 與 zoom、fullscreen 一樣放在右下角
+    options: { position: 'bottomright' },
     onAdd: function() {
       const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
       const button = L.DomUtil.create('a', '', container);
@@ -41,14 +45,12 @@ function initMap() {
       button.style.alignItems = 'center';
       button.style.justifyContent = 'center';
       
-      // 使用與原生按鈕相符的 SVG 圖示
       button.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
         </svg>
       `;
 
-      // 阻止地圖縮放點擊穿透
       L.DomEvent.disableClickPropagation(button);
       
       button.onclick = function(e) {
@@ -60,7 +62,7 @@ function initMap() {
     }
   });
 
-  // 3. 依序加入控制項：定位 -> 縮放 -> 全螢幕 (由上而下排列)
+  // 3. 依序加入控制項
   map.addControl(new LocateControl());
 
   L.control.zoom({
@@ -73,7 +75,12 @@ function initMap() {
     }).addTo(map);
   }
 
+  // 4. 設定 TileLayer 快取與載入策略
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    keepBuffer: 8,            // 【加速重點】留在記憶體中的周圍圖塊數量（避免移動地圖時出現白塊）
+    updateWhenIdle: true,     // 【加速重點】滑動停止後才發送新請求，大幅降低手機 CPU 與網路負擔
+    updateWhenZooming: false, // 縮放過程中不重複請求中間層級的圖磚
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
@@ -84,7 +91,7 @@ function initMap() {
  * 計算兩點經緯度之間的直線距離 (公里 km)
  */
 function getSphericalDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // 地球平均半徑 (km)
+  const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a = 
@@ -124,7 +131,6 @@ function updateNearestPortCard(userLat, userLng) {
     if (card && nameEl && descEl && distEl) {
       nameEl.textContent = nearestPort.name || '未知港口';
       
-      // 使用 parseLocation 自動解析拆分縣市與鄉鎮，並補上空格
       if (typeof parseLocation === 'function') {
         const { county, town } = parseLocation(nearestPort);
         descEl.textContent = `${county} ${town}`.trim();
@@ -135,7 +141,6 @@ function updateNearestPortCard(userLat, userLng) {
           : rawLoc;
       }
 
-      // 距離顯示處理
       distEl.textContent = minDistance < 1 
         ? `${Math.round(minDistance * 1000)} m` 
         : `${minDistance.toFixed(1)} km`;
@@ -199,7 +204,7 @@ function getUserLocation() {
   );
 }
 
-// 保持原本的 renderMapMarkers 與更新 logic
+// 渲染圖標邏輯
 function renderMapMarkers(portsData = [], userCheckins = []) {
   if (!map) initMap();
   if (!markersGroup) return;
@@ -229,7 +234,6 @@ function renderMapMarkers(portsData = [], userCheckins = []) {
       icon: createDotIcon(isVisited)
     });
 
-    // 這裡同步修正地圖 Popup 的顯示，讓彈窗文字也帶有空格
     let locationText = '';
     if (typeof parseLocation === 'function') {
       const { county, town } = parseLocation(spot);

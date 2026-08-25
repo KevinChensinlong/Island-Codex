@@ -2,6 +2,11 @@
    全域變數與主題設定 (ISLAND_CODEX)
    ========================================= */
 
+html, body {
+  overflow-x: hidden; /* 強制隱藏所有橫向溢出的滾動條 */
+  max-width: 100%;
+}
+
 /* 1. 淺色模式 */
 :root {
   --radius-md: 12px;

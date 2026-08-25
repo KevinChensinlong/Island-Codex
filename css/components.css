@@ -735,3 +735,315 @@
   border-color: var(--primary-color, #007bff);
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
 }
+
+/* --------------------------------------------------
+ * 手機版 Header 導覽列 RWD 視覺優化
+ * -------------------------------------------------- */
+@media (max-width: 768px) {
+  /* 頂部外層容器 */
+  .site-header-wrapper {
+    padding: 10px 12px;
+  }
+
+  /* 第一排：Logo 與 右側功能按鈕 */
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .logo-area {
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* 右側使用者資訊與按鈕組 */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  /* 使用者歡迎文字縮小，避免擠壓 */
+  .user-welcome {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #aaa);
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 按鈕尺寸微調適合手機點擊 */
+  .header-actions .btn {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  /* 第二排：分頁切換頁籤 (港口圖鑑 / 臺鐵車站圖鑑) */
+  .page-nav-tabs {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .page-nav-tabs .nav-tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+}
+
+
+/* --------------------------------------------------
+ * 手機版 Header 導覽列 RWD 視覺優化 (徹底解決溢出版)
+ * -------------------------------------------------- */
+@media (max-width: 768px) {
+  /* 頂部外層容器：確保不產生橫向滾動條 */
+  .site-header-wrapper {
+    padding: 8px 12px;
+    overflow-x: hidden;
+  }
+
+  /* 第一排容器：允許必要時換行 */
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* 關鍵：寬度不夠時自動換行，絕不溢出 */
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 4px 0;
+  }
+
+  .logo-area {
+    flex-shrink: 0;
+  }
+
+  .brand-title {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .brand-logo {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* 右側使用者資訊與按鈕組 */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap; /* 子元素空間不足時彈性換行 */
+  }
+
+  /* 使用者歡迎文字：手機版縮小並限制最大寬度 */
+  .user-welcome {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #aaa);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 按鈕樣式：適度縮減邊距以完整容納於手機螢幕 */
+  .header-actions .btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 第二排：分頁切換頁籤 (港口圖鑑 / 臺鐵車站圖鑑) */
+  .page-nav-tabs {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 0;
+  }
+
+  .page-nav-tabs .nav-tab {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm, 8px);
+  }
+}
+
+/* ==========================================
+   地圖彈窗 (Popup) 加速與視覺優化
+   ========================================== */
+
+/* 1. 縮短 Popup 淡入與位移的動畫時間（從預設約 0.3s 降至 0.12s） */
+.leaflet-popup-fade-anim {
+  transition: opacity 0.12s cubic-bezier(0, 0, 0.2, 1), 
+              transform 0.12s cubic-bezier(0, 0, 0.2, 1) !important;
+}
+
+/* 2. 微調縮放（Zoom）與圖層變換的過渡動畫，讓整體反應更靈敏 */
+.leaflet-zoom-anim .leaflet-zoom-animated {
+  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1) !important;
+}
+
+
+/* ==========================================
+   卡片區域齊頭 & 欄位緊湊置中頁尾
+   ========================================== */
+.site-footer {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 56px;
+  padding: 48px 0 36px;
+  background-color: #121214;
+  border-top: 1px solid #27272a;
+  box-sizing: border-box;
+}
+
+/* 限制最大寬度與上方卡片完全一致（例如 800px / 900px），並維持 margin: 0 auto 置中 */
+.footer-container {
+  max-width: 800px;           /* ⚠️ 請修改為你上方卡片的實際 max-width (如 800px) */
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  justify-content: flex-start; /* 讓內容從卡片的左邊緣開始齊頭排列 */
+  align-items: flex-start;
+  gap: 56px;                  /* 品牌與後面欄位之間的固定適中間距 */
+  box-sizing: border-box;
+}
+
+/* 左側品牌區 */
+.footer-brand-col {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.footer-brand-title {
+  font-size: 1.15rem;         /* 稍微縮小的大標 */
+  font-weight: 700;
+  color: #f4f4f5;
+}
+
+.footer-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #a1a1aa;
+  margin: 0;
+  text-align: left;
+}
+
+.copyright {
+  font-size: 0.82rem;
+  color: #71717a;
+  margin-top: 4px;
+  text-align: left;
+}
+
+/* 右側 3 個欄位緊湊相連 */
+.footer-links-grid {
+  display: flex;
+  gap: 48px;                  /* 欄位與欄位之間的固定間距 */
+  text-align: left;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-col-title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #f4f4f5;
+  margin: 0 0 14px 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 0.9rem;
+  color: #a1a1aa;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-links a:hover {
+  color: #3b82f6;
+}
+
+/* RWD 手機版調整 */
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 36px 0 24px;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .footer-brand-col {
+    width: 100%;
+  }
+
+  .footer-links-grid {
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+}

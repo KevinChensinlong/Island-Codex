@@ -47,11 +47,51 @@ function renderHeader() {
   }
 }
 
-// 渲染獨立頁尾
+// 渲染多欄位獨立頁尾
 function renderFooter() {
   const footerHTML = `
     <footer class="site-footer">
-      <p>© 2026 島嶼圖鑑 Island Codex | 個人足跡記錄專案</p>
+      <div class="footer-container">
+        <!-- 左側：品牌名稱與簡介 -->
+        <div class="footer-brand-col">
+          <div class="footer-logo">
+            <img src="images/icon-512.jpg" alt="Logo" class="brand-logo">
+            <span class="footer-brand-title">島嶼圖鑑 TW</span>
+          </div>
+          <p class="footer-desc">紀錄台灣港口與鐵道車站足跡，探索島嶼地景與人文歷史。</p>
+          <p class="copyright">&copy; 2026 島嶼圖鑑 Island Codex</p>
+        </div>
+
+        <!-- 右側：多類別連結欄位 -->
+        <div class="footer-links-grid">
+          <!-- 類別 1：圖鑑導覽 -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">圖鑑導覽</h4>
+            <ul class="footer-links">
+              <li><a href="index.html">港口圖鑑</a></li>
+              <li><a href="stations.html">臺鐵車站圖鑑</a></li>
+            </ul>
+          </div>
+
+          <!-- 類別 2：專案資訊 -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">專案資訊</h4>
+            <ul class="footer-links">
+              <li><a href="https://github.com" target="_blank" rel="noopener">GitHub 原始碼</a></li>
+              <li><a href="https://github.com/KevinChensinlong/Island-Codex/blob/main/README.md#%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AA%8C" target="_blank" rel="noopener">更新日誌</a></li>
+            </ul>
+          </div>
+
+          <!-- 類別 3：相關連結 -->
+          <div class="footer-col">
+            <h4 class="footer-col-title">資料來源</h4>
+            <ul class="footer-links">
+              <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap</a></li>
+              <li><a href="https://zh.wikipedia.org" target="_blank" rel="noopener">維基百科</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </footer>
   `;
 
@@ -131,7 +171,7 @@ function autoResizeTextarea(textarea) {
   textarea.style.height = (textarea.scrollHeight + 2) + 'px';
 }
 
-// 開啟打卡 Modal
+// 開啟打卡 Modal (精確還原舊筆記與造訪日期)
 function openCheckinModal(spotId, spotName) {
   const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
   if (!currentUser) {
@@ -143,19 +183,20 @@ function openCheckinModal(spotId, spotName) {
     return;
   }
 
-  // 尋找該使用者對該景點的舊筆記與造訪日期
-  let existingNote = '';
-  let existingDate = new Date().toISOString().split('T')[0]; // 預設今日
+  // 1. 取得當前全域中的打卡紀錄
+  const checkins = (window.AppState && window.AppState.checkins) || window.currentUserCheckins || window.allCheckinRecords || [];
+  
+  // 2. 比對此景點屬於該使用者的最後一筆打卡紀錄
+  const record = checkins.filter(c => {
+    const matchSpot = String(c.spotId || c.id || '') === String(spotId);
+    const matchUser = !c.userId && !c.account ? true : String(c.userId || c.account) === String(currentUser.account);
+    return matchSpot && matchUser;
+  }).pop();
 
-  const checkins = (window.AppState && window.AppState.checkins) || window.allCheckinRecords || [];
-  const record = checkins.findLast ?
-    checkins.findLast(c => String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account)) :
-    checkins.filter(c => String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account)).pop();
-
-  if (record) {
-    if (record.note) existingNote = record.note;
-    if (record.visitedDate) existingDate = record.visitedDate;
-  }
+  // 3. 解析舊日期與舊筆記 (若是無舊紀錄，日期才自動預設帶入今天 YYYY-MM-DD)
+  const todayStr = new Date().toISOString().split('T')[0];
+  const existingNote = record ? (record.note || '') : '';
+  const existingDate = record ? (record.visitedDate || record.visited_date || todayStr) : todayStr;
 
   let dialog = document.getElementById('checkin-dialog');
   if (!dialog) {
@@ -272,10 +313,11 @@ async function handleCheckinSubmit(event, spotId) {
 
     // 蓋掉該使用者的舊打卡紀錄並加入新紀錄
     window.AppState.checkins = window.AppState.checkins.filter(
-      c => !(String(c.spotId) === String(spotId) && String(c.userId || c.account) === String(currentUser.account))
+      c => !(String(c.spotId || c.id || '') === String(spotId) && String(c.userId || c.account) === String(currentUser.account))
     );
     window.AppState.checkins.push(newRecord);
     window.allCheckinRecords = window.AppState.checkins; // 備份同步
+    window.currentUserCheckins = window.AppState.checkins;
 
     if (msgBox) {
       msgBox.textContent = "打卡成功！資料已寫入雲端。";
@@ -314,4 +356,3 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFooter();
   renderAuthModal();
 });
-
