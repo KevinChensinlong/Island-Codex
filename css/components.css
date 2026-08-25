@@ -2,7 +2,8 @@
    組件樣式 (Header, Footer, Buttons, Cards)
    ========================================= */
 
-/* 頁首與頁尾 */
+
+   /* 頁首與頁尾 */
 .site-header {
   padding: 16px;
   display: flex;
@@ -933,13 +934,148 @@
 
 /* 限制最大寬度與上方卡片完全一致（例如 800px / 900px），並維持 margin: 0 auto 置中 */
 .footer-container {
-  max-width: 800px;           /* ⚠️ 請修改為你上方卡片的實際 max-width (如 800px) */
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 16px;
   display: flex;
-  justify-content: flex-start; /* 讓內容從卡片的左邊緣開始齊頭排列 */
+  justify-content: flex-start;
   align-items: flex-start;
-  gap: 56px;                  /* 品牌與後面欄位之間的固定適中間距 */
+  gap: 56px;
+  box-sizing: border-box;
+}
+
+/* 左側品牌區 */
+.footer-brand-col {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+/* 預設（淺色模式）文字顏色 */
+.footer-brand-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.footer-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #475569);
+  margin: 0;
+  text-align: left;
+}
+
+.copyright {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #94a3b8);
+  margin-top: 4px;
+  text-align: left;
+}
+
+/* 右側 3 個欄位緊湊相連 */
+.footer-links-grid {
+  display: flex;
+  gap: 48px;
+  text-align: left;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-col-title {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-primary, #0f172a);
+  margin: 0 0 14px 0;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #475569);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color, #007bff);
+}
+
+/* ==========================================
+   主題變數定義 (請確保 CSS 最上方有定義，或直接加在元件檔案中)
+   ========================================== */
+:root {
+  --bg-footer: #ffffff;          /* 淺色模式頁尾背景：純白/淺灰 */
+  --border-footer: #e2e8f0;      /* 淺色模式頁尾頂部邊框 */
+  --text-footer-primary: #0f172a;/* 淺色模式頁尾標題黑字 */
+  --text-footer-secondary: #475569;/* 淺色模式頁尾內文灰字 */
+  --text-footer-muted: #94a3b8;  /* 淺色模式版權淡灰字 */
+}
+
+/* 當 body 帶有 data-theme="dark" 時覆蓋變數 */
+body[data-theme="dark"] {
+  --bg-footer: #121214;          /* 深色模式頁尾背景 */
+  --border-footer: #27272a;      /* 深色模式頁尾頂部邊框 */
+  --text-footer-primary: #f4f4f5;/* 深色模式頁尾標題白字 */
+  --text-footer-secondary: #a1a1aa;/* 深色模式頁尾內文灰字 */
+  --text-footer-muted: #71717a;  /* 深色模式版權灰字 */
+}
+
+/* ==========================================
+   頁尾外層區塊
+   ========================================== */
+.site-footer {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 56px;
+  padding: 48px 0 36px;
+  background-color: var(--bg-footer);
+  border-top: 1px solid var(--border-footer);
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* 限制最大寬度與上方卡片完全一致 */
+.footer-container {
+  max-width: 800px; 
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 56px;
   box-sizing: border-box;
 }
 
@@ -966,30 +1102,30 @@
 }
 
 .footer-brand-title {
-  font-size: 1.15rem;         /* 稍微縮小的大標 */
+  font-size: 1.15rem;
   font-weight: 700;
-  color: #f4f4f5;
+  color: var(--text-footer-primary);
 }
 
 .footer-desc {
   font-size: 0.88rem;
   line-height: 1.6;
-  color: #a1a1aa;
+  color: var(--text-footer-secondary);
   margin: 0;
   text-align: left;
 }
 
 .copyright {
   font-size: 0.82rem;
-  color: #71717a;
+  color: var(--text-footer-muted);
   margin-top: 4px;
   text-align: left;
 }
 
-/* 右側 3 個欄位緊湊相連 */
+/* 右側欄位 */
 .footer-links-grid {
   display: flex;
-  gap: 48px;                  /* 欄位與欄位之間的固定間距 */
+  gap: 48px;
   text-align: left;
 }
 
@@ -1002,7 +1138,7 @@
 .footer-col-title {
   font-size: 1.02rem;
   font-weight: 600;
-  color: #f4f4f5;
+  color: var(--text-footer-primary);
   margin: 0 0 14px 0;
 }
 
@@ -1018,7 +1154,7 @@
 
 .footer-links a {
   font-size: 0.9rem;
-  color: #a1a1aa;
+  color: var(--text-footer-secondary);
   text-decoration: none;
   transition: color 0.15s ease;
 }

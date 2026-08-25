@@ -2,21 +2,36 @@
  * 島嶼圖鑑 Island Codex - 元件與打卡彈窗模組 (components.js)
  */
 
+// 判斷當前是否在 html/ 子目錄，動態計算相對根目錄的前綴路徑
+const isInHtmlDir = window.location.pathname.includes('/html/');
+const basePath = isInHtmlDir ? '../' : './';
+
 // 渲染獨立頁首 (包含登入狀態與分頁頁籤)
 function renderHeader() {
   const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
   // 透過網址判斷目前是否在「臺鐵車站」頁面
-  const isStationPage = window.location.pathname.includes('stations.html');
+  const isStationPage = window.location.pathname.includes('TR_stations.html');
+  
+  // 判斷目前是否在「首頁」 (即網址為 index.html 或根目錄)
+  const isHomePage = window.location.pathname.endsWith('/') || 
+                     window.location.pathname.endsWith('/index.html') || 
+                     (!window.location.pathname.includes('/html/'));
+
+  // 計算連結路徑
+  const homeLink = `${basePath}index.html`;
+  const portLink = isInHtmlDir ? 'ports.html' : 'html/ports.html';
+  const stationLink = isInHtmlDir ? 'TR_stations.html' : 'html/TR_stations.html';
 
   const headerHTML = `
     <header class="site-header-wrapper">
       <div class="site-header">
-        <div class="logo-area">
+        <!-- 點擊 Logo 區域即可回首頁 -->
+        <a href="${homeLink}" class="logo-area" style="text-decoration: none; color: inherit;">
           <h1 class="brand-title">
-            <img src="images/icon-512.jpg" alt="Logo" class="brand-logo">
+            <img src="${basePath}images/icon-512.jpg" alt="Logo" class="brand-logo">
             島嶼圖鑑 <span>TW</span>
           </h1>
-        </div>
+        </a>
         <div class="header-actions">
           ${currentUser ? `
               <span class="user-welcome">您好！ ${currentUser.name || currentUser.account} </span>
@@ -28,11 +43,13 @@ function renderHeader() {
         </div>
       </div>
 
-      <!-- 頂部分頁切換頁籤 -->
-      <nav class="page-nav-tabs">
-        <a href="index.html" class="nav-tab ${!isStationPage ? 'active' : ''}">港口圖鑑</a>
-        <a href="stations.html" class="nav-tab ${isStationPage ? 'active' : ''}">臺鐵車站圖鑑</a>
-      </nav>
+      <!-- 當「不是首頁」時，才渲染頂部分頁切換頁籤 -->
+      ${!isHomePage ? `
+        <nav class="page-nav-tabs">
+          <a href="${portLink}" class="nav-tab ${!isStationPage ? 'active' : ''}">港口圖鑑</a>
+          <a href="${stationLink}" class="nav-tab ${isStationPage ? 'active' : ''}">臺鐵車站圖鑑</a>
+        </nav>
+      ` : ''}
     </header>
   `;
 
@@ -49,13 +66,16 @@ function renderHeader() {
 
 // 渲染多欄位獨立頁尾
 function renderFooter() {
+  const portLink = isInHtmlDir ? 'ports.html' : 'html/ports.html';
+  const stationLink = isInHtmlDir ? 'TR_stations.html' : 'html/TR_stations.html';
+
   const footerHTML = `
     <footer class="site-footer">
       <div class="footer-container">
         <!-- 左側：品牌名稱與簡介 -->
         <div class="footer-brand-col">
           <div class="footer-logo">
-            <img src="images/icon-512.jpg" alt="Logo" class="brand-logo">
+            <img src="${basePath}images/icon-512.jpg" alt="Logo" class="brand-logo">
             <span class="footer-brand-title">島嶼圖鑑 TW</span>
           </div>
           <p class="footer-desc">紀錄台灣港口與鐵道車站足跡，探索島嶼地景與人文歷史。</p>
@@ -68,8 +88,8 @@ function renderFooter() {
           <div class="footer-col">
             <h4 class="footer-col-title">圖鑑導覽</h4>
             <ul class="footer-links">
-              <li><a href="index.html">港口圖鑑</a></li>
-              <li><a href="stations.html">臺鐵車站圖鑑</a></li>
+              <li><a href="${portLink}">港口圖鑑</a></li>
+              <li><a href="${stationLink}">臺鐵車站圖鑑</a></li>
             </ul>
           </div>
 
@@ -245,7 +265,7 @@ function openCheckinModal(spotId, spotName) {
   }
 }
 
-// 處理打卡表單提交 (背景寫入 Google Form 並更新全域狀態)
+// 處理打卡表單提交 (背景寫入 Google Form 並更新全域狀態與 LocalStorage 快取)
 async function handleCheckinSubmit(event, spotId) {
   event.preventDefault();
   const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
@@ -299,7 +319,7 @@ async function handleCheckinSubmit(event, spotId) {
     tempForm.submit();
     document.body.removeChild(tempForm);
 
-    // --- 同步更新本地與全域打卡紀錄 ---
+    // --- 同步更新本地全域打卡紀錄 ---
     const newRecord = {
       spotId: String(spotId),
       userId: String(currentUser.account),
@@ -318,6 +338,10 @@ async function handleCheckinSubmit(event, spotId) {
     window.AppState.checkins.push(newRecord);
     window.allCheckinRecords = window.AppState.checkins; // 備份同步
     window.currentUserCheckins = window.AppState.checkins;
+
+    // ⚡【新增】同步更新 LocalStorage 本地快取，確保重新整理頁面後能秒開最新資料
+    const cacheKey = `checkins_${currentUser.account}`;
+    localStorage.setItem(cacheKey, JSON.stringify(window.AppState.checkins));
 
     if (msgBox) {
       msgBox.textContent = "打卡成功！資料已寫入雲端。";

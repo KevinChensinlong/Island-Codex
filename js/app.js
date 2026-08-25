@@ -2,13 +2,17 @@
  * 島嶼圖鑑 Island Codex - 主應用程式入口 (app.js)
  */
 
-// 判斷當前頁面類型（若網址包含 stations.html 則為車站頁面，否則為港口頁面）
-const PAGE_TYPE = window.location.pathname.includes('stations.html') ? 'station' : 'port';
+// 判斷當前頁面類型（若網址包含 TR_stations.html 則為車站頁面，否則為港口頁面）
+const PAGE_TYPE = window.location.pathname.includes('TR_stations.html') ? 'station' : 'port';
+
+// 判斷當前是否在 html/ 子目錄下，自動調整 JSON 資料讀取路徑
+const BASE_DATA_PATH = window.location.pathname.includes('/html/') ? '../data/' : './data/';
 
 window.currentUserCheckins = [];
 window.portsData = [];
 
 let smoothProgressInterval = null;
+let currentProgressVal = 0; // 紀錄當前進度數值
 
 // 輔助函式：更新進度條狀態
 function updateProgress(percent, text = "資料載入中...") {
@@ -21,10 +25,34 @@ function updateProgress(percent, text = "資料載入中...") {
         container.style.display = 'block';
         if (portList) portList.style.opacity = '0.3';
 
-        const safePercent = Math.min(100, Math.max(0, Math.round(percent)));
-        fill.style.width = `${safePercent}%`;
-        if (textElem) textElem.textContent = `${text} (${safePercent}%)`;
+        currentProgressVal = Math.min(100, Math.max(0, Math.round(percent)));
+        fill.style.width = `${currentProgressVal}%`;
+        if (textElem) textElem.textContent = `${text} (${currentProgressVal}%)`;
     }
+}
+
+// 輔助函式：平滑衝到 100% 後隱藏進度條
+function finishProgress(statusText = "同步完成！", durationMs = 250) {
+    stopTrickleProgress();
+
+    const startVal = currentProgressVal;
+    const startTime = performance.now();
+
+    function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / durationMs);
+        const current = startVal + (100 - startVal) * progress;
+
+        updateProgress(current, statusText);
+
+        if (progress < 1) {
+            requestAnimationFrame(step);
+        } else {
+            hideProgress();
+        }
+    }
+
+    requestAnimationFrame(step);
 }
 
 // 輔助函式：隱藏進度條
@@ -36,14 +64,14 @@ function hideProgress() {
         setTimeout(() => {
             container.style.display = 'none';
             if (portList) portList.style.opacity = '1';
-        }, 300);
+        }, 200);
     }
 }
 
 function startTrickleProgress(startPercent = 40, statusText = "連線雲端資料中...") {
     if (smoothProgressInterval) clearInterval(smoothProgressInterval);
 
-    let current = startPercent;
+    let current = Math.max(currentProgressVal, startPercent);
 
     smoothProgressInterval = setInterval(() => {
         if (current < 85) {
@@ -68,9 +96,11 @@ function stopTrickleProgress() {
     }
 }
 
-// 動態載入 JSON 資料（根據頁面類型自動讀取 ports.json 或 TR_station.json）
+// 動態載入 JSON 資料（依據目前 URL 位置尋找 ../data/ 或 ./data/）
 async function loadPortsData() {
-    const jsonPath = PAGE_TYPE === 'station' ? './data/TR_station.json' : './data/ports.json';
+    const fileName = PAGE_TYPE === 'station' ? 'TR_station.json' : 'ports.json';
+    const jsonPath = `${BASE_DATA_PATH}${fileName}`;
+    
     try {
         const res = await fetch(`${jsonPath}?v=${new Date().getTime()}`);
         if (!res.ok) throw new Error(`HTTP 錯誤: ${res.status}`);
@@ -86,17 +116,66 @@ async function loadPortsData() {
 async function initApp() {
     stopTrickleProgress();
     const targetLabel = PAGE_TYPE === 'station' ? '車站' : '景點';
-    updateProgress(15, `讀取${targetLabel}清單...`);
+    updateProgress(20, `讀取${targetLabel}清單...`);
 
     const ports = await loadPortsData();
-    updateProgress(40, "驗證使用者狀態...");
+    updateProgress(45, "驗證使用者狀態...");
 
     const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
     let userCheckins = [];
+    let hasCache = false;
 
+    const cacheKey = currentUser && currentUser.account ? `checkins_${currentUser.account}` : 'checkins_guest';
+
+    // 1. 檢查快取
+    const cachedData = localStorage.getItem(cacheKey);
+    if (cachedData) {
+        try {
+            userCheckins = JSON.parse(cachedData);
+            hasCache = userCheckins.length > 0;
+        } catch (e) {
+            console.warn("快取解析失敗：", e);
+        }
+    }
+
+    // 將資料同步至全域
+    window.currentUserCheckins = userCheckins;
+    window.AppState = window.AppState || {};
+    window.AppState.allPorts = ports;
+    window.AppState.checkins = userCheckins;
+
+    // 2. 初始化選單與卡片
+    if (typeof initFilterOptions === 'function' && document.getElementById('countyFilter')) {
+        initFilterOptions(ports);
+    }
+
+    if (typeof renderMapMarkers === 'function' && document.getElementById('map')) {
+        renderMapMarkers(ports, userCheckins);
+    }
+
+    if (document.getElementById('port-list')) {
+        if (typeof handleSearchAndFilter === 'function') {
+            handleSearchAndFilter();
+        } else if (typeof renderCards === 'function') {
+            renderCards(ports, userCheckins);
+        }
+    }
+
+    // 3. 有快取：快速滑動進度條到 100% 秒開；無快取/網路慢：啟動平滑爬升進度條
+    if (hasCache) {
+        // 快取秒開，進度條以極快速度 (180ms) 衝滿到 100%
+        finishProgress("載入完成！", 180);
+    } else {
+        // 無快取時，開啟正常爬升進度條
+        if (currentUser && currentUser.account) {
+            startTrickleProgress(60, `同步 ${currentUser.name || currentUser.account} 的打卡紀錄...`);
+        } else {
+            updateProgress(75, "繪製卡片中...");
+        }
+    }
+
+    // 4. 背景同步雲端最新打卡紀錄
     if (currentUser && currentUser.account) {
-        startTrickleProgress(40, `同步 ${currentUser.name || currentUser.account} 的打卡紀錄...`);
-
         try {
             const hasValidApiUrl = typeof CONFIG !== 'undefined' &&
                 CONFIG.apiUrl &&
@@ -112,44 +191,35 @@ async function initApp() {
 
                 const data = await res.json();
                 if (data.success && Array.isArray(data.records)) {
-                    userCheckins = data.records;
+                    const latestCheckins = data.records;
+
+                    if (JSON.stringify(latestCheckins) !== JSON.stringify(userCheckins)) {
+                        window.currentUserCheckins = latestCheckins;
+                        window.AppState.checkins = latestCheckins;
+                        localStorage.setItem(cacheKey, JSON.stringify(latestCheckins));
+
+                        if (typeof handleSearchAndFilter === 'function') {
+                            handleSearchAndFilter();
+                        } else if (typeof renderCards === 'function') {
+                            renderCards(ports, latestCheckins);
+                        }
+                    }
                 }
             }
         } catch (err) {
-            console.error("讀取個人打卡資料失敗：", err);
+            console.error("讀取雲端打卡資料失敗（使用本地快取）：", err);
         } finally {
-            stopTrickleProgress();
+            // 如果原本沒有快取（代表進度條還在跑），當 API 完成時衝滿到 100%
+            if (!hasCache) {
+                finishProgress("同步完成！", 300);
+            }
         }
+    } else if (!hasCache) {
+        finishProgress("載入完成！", 250);
     }
-
-    window.currentUserCheckins = userCheckins;
-
-    window.AppState = window.AppState || {};
-    window.AppState.allPorts = ports;
-    window.AppState.checkins = userCheckins;
-
-    if (typeof initFilterOptions === 'function') {
-        initFilterOptions(ports);
-    }
-
-    updateProgress(98, `繪製地圖與${targetLabel}卡片...`);
-
-    if (typeof renderMapMarkers === 'function') {
-        renderMapMarkers(ports, userCheckins);
-    }
-
-    if (typeof handleSearchAndFilter === 'function') {
-        handleSearchAndFilter();
-    } else if (typeof renderCards === 'function') {
-        renderCards(ports, userCheckins);
-    }
-
-    updateProgress(100, "同步完成！");
-    hideProgress();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 確保獨立 Header & Footer 模組能正常掛載
     if (typeof renderHeader === 'function') renderHeader();
     if (typeof renderFooter === 'function') renderFooter();
 
@@ -169,17 +239,14 @@ function updateNearestPortUI(nearestPort, distance) {
 
     if (!nearestPort || !card) return;
 
-    // 1. 設定名稱與距離
     if (nameEl) nameEl.textContent = nearestPort.name;
     if (distEl) distEl.textContent = `${distance.toFixed(1)} km`;
 
-    // 2. 使用 cards.js 的 parseLocation 解析地址並加上空格
     if (descEl) {
         if (typeof parseLocation === 'function') {
             const { county, town } = parseLocation(nearestPort);
             descEl.textContent = `${county} ${town}`.trim();
         } else {
-            // 後備切分邏輯（前 3 個字為縣市）
             const rawLoc = nearestPort.county || nearestPort.city || nearestPort.location || '';
             descEl.textContent = rawLoc.length > 3 
                 ? `${rawLoc.substring(0, 3)} ${rawLoc.substring(3)}` 

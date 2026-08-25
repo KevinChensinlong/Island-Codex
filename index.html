@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>島嶼圖鑑 Island Codex</title>
+
+    <!-- 1. 網頁頁籤圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="images/icon-192.jpg">
+    <!-- 2. Apple iOS 裝置主畫面圖示 -->
+    <link rel="apple-touch-icon" href="images/icon-192.jpg">
+
+    <!-- 全域 CSS 樣式 -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/home.css">
+
+    <!-- 引入 PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+
+    <!-- iOS (Safari) 專用設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- 獨立頁首 -->
+        <div id="header-container"></div>
+
+        <!-- 主要內容區 -->
+        <main class="home-main">
+            <!-- 1. Hero 區塊 -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">Island Codex</div>
+                    <h1 class="hero-title">島嶼圖鑑</h1>
+                    <p class="hero-subtitle">紀錄台灣海岸港口與鐵道車站足跡，探索島嶼地景與人文歷史。</p>
+
+                    <div class="hero-actions">
+                        <a href="html/ports.html" class="btn btn-primary">探索港口圖鑑</a>
+                        <a href="html/TR_stations.html" class="btn btn-primary">探索車站圖鑑</a>
+                    </div>
+                </div>
+
+                <!-- 頂部滑動標籤 -->
+                <div class="hero-carousel-tags">
+                    <div class="tag-card">
+                        <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="5" r="3" />
+                            <path d="M12 22V8" />
+                            <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+                        </svg>
+                        梗枋漁港
+                    </div>
+                    <div class="tag-card">
+                        <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="16" height="16" x="4" y="3" rx="2" />
+                            <path d="M4 11h16" />
+                            <path d="M12 3v8" />
+                            <path d="m8 19-2 3" />
+                            <path d="m18 22-2-3" />
+                            <circle cx="8" cy="15" r="1" />
+                            <circle cx="16" cy="15" r="1" />
+                        </svg>
+                        石城車站
+                    </div>
+                    <div class="tag-card">
+                        <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="5" r="3" />
+                            <path d="M12 22V8" />
+                            <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+                        </svg>
+                        八斗子漁港
+                    </div>
+                    <div class="tag-card">
+                        <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="16" height="16" x="4" y="3" rx="2" />
+                            <path d="M4 11h16" />
+                            <path d="M12 3v8" />
+                            <path d="m8 19-2 3" />
+                            <path d="m18 22-2-3" />
+                            <circle cx="8" cy="15" r="1" />
+                            <circle cx="16" cy="15" r="1" />
+                        </svg>
+                        猴硐車站
+                    </div>
+                    <div class="tag-card">
+                        <svg class="tag-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="5" r="3" />
+                            <path d="M12 22V8" />
+                            <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+                        </svg>
+                        外木山漁港
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 圖鑑核心模組 -->
+            <section class="home-section">
+                <h2 class="section-title">圖鑑核心模組</h2>
+                <p class="section-desc">選擇你想探索的島嶼主題，查看詳細足跡與歷史資料。</p>
+
+                <div class="feature-grid">
+                    <a href="html/ports.html" class="feature-card">
+                        <div class="card-icon icon-purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="5" r="3" />
+                                <path d="M12 22V8" />
+                                <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <h3>港口圖鑑</h3>
+                            <p>收錄全台各大漁港與商港，紀錄踏查足跡、定位與維基百科簡介。</p>
+                            <span class="card-link">前往探索 &rarr;</span>
+                        </div>
+                    </a>
+
+                    <a href="html/TR_stations.html" class="feature-card">
+                        <div class="card-icon icon-purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="16" height="16" x="4" y="3" rx="2" />
+                                <path d="M4 11h16" />
+                                <path d="M12 3v8" />
+                                <path d="m8 19-2 3" />
+                                <path d="m18 22-2-3" />
+                                <circle cx="8" cy="15" r="1" />
+                                <circle cx="16" cy="15" r="1" />
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <h3>臺鐵車站圖鑑</h3>
+                            <p>紀錄西部幹線、宜蘭線及各支線車站，掌握營運狀態與列車模型足跡。</p>
+                            <span class="card-link">前往探索 &rarr;</span>
+                        </div>
+                    </a>
+
+                    <a href="javascript:void(0)" class="feature-card disabled">
+                        <div class="card-icon icon-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                                <line x1="9" x2="9" y1="3" y2="18" />
+                                <line x1="15" x2="15" y1="6" y2="21" />
+                            </svg>
+                        </div>
+                        <div class="card-body">
+                            <h3>互動地圖 <span class="badge-tag">即將推出</span></h3>
+                            <p>結合 OpenStreetMap 向量地圖，直觀展現港口與鐵道的空間分佈。</p>
+                            <span class="card-link">開發中...</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 3. 特色展示區 (Feature Rows) -->
+            <section class="home-section feature-rows-section">
+                <div class="feature-row">
+                    <div class="feature-text">
+                        <span class="feature-badge">踏查紀錄</span>
+                        <h2>輕鬆快速找到你想探索的地點</h2>
+                        <p>支援多條件縣市、鄉鎮與踏查狀態篩選，快速檢索全台港口與車站資料庫，並提供精確地理定位與周邊資訊。</p>
+                    </div>
+                    <div class="feature-preview-box">
+                        <div class="preview-mockup">
+                            <div class="mockup-header">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="m21 21-4.3-4.3" />
+                                </svg>
+                                搜尋與篩選器模組
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-item">宜蘭縣 頭城鎮（石城車站）</div>
+                                <div class="mockup-item">基隆市 中正區（八斗子漁港）</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-row reverse">
+                    <div class="feature-text">
+                        <span class="feature-badge">雲端同步</span>
+                        <h2>紀錄屬於你的島嶼足跡</h2>
+                        <p>結合雲端表單即時同步技術，記錄每次造訪日期與個人心得筆記，隨時回顧踏查旅程。</p>
+                    </div>
+                    <div class="feature-preview-box">
+                        <div class="preview-mockup">
+                            <div class="mockup-header">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M12 20h9" />
+                                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                </svg>
+                                個人打卡筆記預覽
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-card">「踏查完猴硐車站後，順遊柴聯自強號運行的宜蘭線海岸...」</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. 6 大優勢 Grid -->
+            <section class="home-section highlights-section">
+                <h2 class="section-title">為什麼使用島嶼圖鑑？</h2>
+                <p class="section-desc">專為在地踏查者與鐵道/港口愛好者打造的現代化網頁應用。</p>
+
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="m13 2-2 10h8L7 22l2-10H1z" />
+                            </svg>
+                        </div>
+                        <h3>極速載入</h3>
+                        <p>採用輕量化原生 JS 模組化架構，無冗餘依賴，秒級展開地圖與卡片。</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                                <path d="M2 12h20" />
+                            </svg>
+                        </div>
+                        <h3>離線 PWA 支援</h3>
+                        <p>完整支援 Service Worker 快取機制，即使在偏遠海岸收訊不佳也能順暢瀏覽。</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <h3>高精準地圖</h3>
+                        <p>整合 Leaflet 與 OpenStreetMap 開源圖資，提供精確定位與鄰近點距離計算。</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                                <path d="M12 18h.01" />
+                            </svg>
+                        </div>
+                        <h3>響應式體驗</h3>
+                        <p>針對手機桌面化適配，行動裝置支援加到主畫面與高解析圓角 App Icon。</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <h3>獨立會員系統</h3>
+                        <p>支援快速帳號註冊與登入，雲端加密儲存個人專屬打卡歷史與心得。</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="hl-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                            </svg>
+                        </div>
+                        <h3>深色模式</h3>
+                        <p>內建自動與手動深淺色主題切換，夜間查看地圖與資料時保護視力。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. 最新動態 / 專案狀態 (Real Project Status) -->
+            <section class="home-section news-section">
+                <div class="news-header">
+                    <span class="news-badge">Project Status</span>
+                    <h2 class="section-title">站點資料庫與 API 整合進度</h2>
+                    <p class="section-desc">即時掌握 TR_station.json 檔案維護與 TDX 交通資料介接狀態。</p>
+                </div>
+                <div class="news-grid">
+                    <article class="news-card">
+                        <div class="news-card-tag">資料庫</div>
+                        <h3>TR_station.json 站點資料擴充</h3>
+                        <p>已整合東北角與宜蘭線主要車站、鄰近漁港之座標與圖示標籤資料。</p>
+                        <span class="news-date">v1.2.0</span>
+                    </article>
+                    <article class="news-card">
+                        <div class="news-card-tag">API 介接</div>
+                        <h3>TDX 運輸資料 API 整合</h3>
+                        <p>介接交通部 TDX 平台，提供台鐵列車預計到站與沿線公車動態查詢。</p>
+                        <span class="news-date">Service Ready</span>
+                    </article>
+                    <article class="news-card">
+                        <div class="news-card-tag">UI 介接</div>
+                        <h3>交錯式特色展示與主題切換</h3>
+                        <p>完整支援 Light / Dark Mode 深淺色主題，並優化手機端膠囊標籤橫向滑動體驗。</p>
+                        <span class="news-date">Active</span>
+                    </article>
+                </div>
+            </section>
+
+            <!-- 6. 常見問題手風琴區 (FAQ Section) -->
+            <section class="home-section faq-section">
+                <h2 class="section-title text-center">常見問題 FAQ</h2>
+                <p class="section-desc text-center">關於平台資料來源與使用方式的快速解答。</p>
+
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary class="faq-question">港口及車站座標來源是哪裡？</summary>
+                        <div class="faq-answer">
+                            <p>本平台所有資料座標由人工輸入，並搭配網路上現有資料進行人工審核後上傳。</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">如何快速搜尋特定的車站或漁港卡片？</summary>
+                        <div class="faq-answer">
+                            <p>點擊頂部導覽列的「站點探索」即可使用關鍵字搜尋，或直接點擊 Hero 區塊的熱門膠囊標籤快速篩選。</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">支援深色模式（Dark Mode） 切換嗎？</summary>
+                        <div class="faq-answer">
+                            <p>是的，點擊右上角的主題切換按鈕即可隨時切換亮色與深色質感介面。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <!-- 7. 頁尾前的 Call to Action (CTA 區塊) -->
+            <section class="cta-banner-section">
+                <div class="cta-banner-content">
+                    <h2>準備好開始你的海岸鐵道之旅了嗎？</h2>
+                    <p>立即探索所有站點卡片，規劃屬於你的專屬鐵道與漁港行程。</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- 獨立頁尾 -->
+        <div id="footer-container"></div>
+    </div>
+
+    <!-- 全域與元件腳本 -->
+    <script src="js/config.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/components.js"></script>
+
+    <!-- PWA Service Worker 註冊 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker 註冊成功！', reg))
+                    .catch(err => console.error('Service Worker 註冊失敗：', err));
+            });
+        }
+    </script>
+
+    <!-- 動態生成 25% 圓角 Favicon -->
+    <script>
+        function setRoundedFavicon(iconUrl, borderRadiusRatio = 0.25) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = iconUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = img.width || 128;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                const radius = size * borderRadiusRatio;
+
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(size, 0, size, size, radius);
+                ctx.arcTo(size, size, 0, size, radius);
+                ctx.arcTo(0, size, 0, 0, radius);
+                ctx.arcTo(0, 0, size, 0, radius);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, size, size);
+
+                let link = document.querySelector("link[rel*='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+        }
+        setRoundedFavicon('images/icon-192.jpg', 0.25);
+    </script>
+</body>
+
+</html>

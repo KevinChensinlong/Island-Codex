@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>臺鐵車站圖鑑</title>
+
+    <!-- 1. 網頁頁籤圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="../images/icon-192.jpg">
+    <!-- 2. Apple iOS 裝置主畫面圖示 -->
+    <link rel="apple-touch-icon" href="../images/icon-192.jpg">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.css" />
+
+    <!-- 專案樣式表 -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/map.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- 圖片載入模組 -->
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
+    <link rel="dns-prefetch" href="https://tile.openstreetmap.org">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#007bff">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 獨立 Header 渲染容器 -->
+        <div id="header-container"></div>
+
+        <main>
+            <!-- 地圖區域 -->
+            <div id="map-container" style="position: relative;">
+                <div id="map"></div>
+                <!-- 載入進度條 -->
+                <div id="loading-progress-container" class="progress-wrapper" style="display: none;">
+                    <p id="progress-text">資料載入中，請稍候...</p>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近車站卡片 -->
+            <div class="nearest-port-container">
+                <div id="nearestPortCard" class="port-card nearest-port-card" style="display: none;">
+                    <div class="nearest-card-header">
+                        <div class="nearest-badge-group">
+                            <span class="nearest-tag">距離您最近車站</span>
+                            <h3 id="nearestPortName" class="port-title">載入中...</h3>
+                            <p id="nearestPortDesc" class="port-city">--</p>
+                        </div>
+                        <span id="nearestDistance" class="nearest-dist-badge">-- km</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搜尋與篩選器區域 -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="filter-control search-input" placeholder="搜尋車站名稱或關鍵字..."
+                        oninput="handleSearchAndFilter()" />
+                </div>
+                <div class="filter-controls-group">
+                    <select id="countyFilter" class="filter-control filter-select" onchange="handleCountyChange()">
+                        <option value="all">全部縣市</option>
+                    </select>
+                    <select id="townFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
+                        <option value="all">全部鄉鎮市區</option>
+                    </select>
+                    <select id="statusFilter" class="filter-control filter-select" onchange="handleSearchAndFilter()">
+                        <option value="all">全部狀態</option>
+                        <option value="visited">已踩點</option>
+                        <option value="unvisited">未踩點</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 車站卡片清單容器 -->
+            <div id="port-list"></div>
+        </main>
+
+        <!-- 獨立 Footer 渲染容器 -->
+        <div id="footer-container"></div>
+    </div>
+
+    <!-- JS 模組引入 -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-fullscreen@1.0.2/dist/leaflet.fullscreen.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/map.js"></script>
+    <script src="../js/cards.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        function setRoundedFavicon(iconUrl, borderRadiusRatio = 0.2) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = iconUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = img.width || 128;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                const radius = size * borderRadiusRatio; // 計算 20% 圓角半徑
+
+                // 使用 Path 畫出 20% 圓角的矩形裁切區域
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(size, 0, size, size, radius);
+                ctx.arcTo(size, size, 0, size, radius);
+                ctx.arcTo(0, size, 0, 0, radius);
+                ctx.arcTo(0, 0, size, 0, radius);
+                ctx.closePath();
+                ctx.clip();
+
+                // 繪製圖片
+                ctx.drawImage(img, 0, 0, size, size);
+
+                // 替換或新增頁籤 Favicon 連結
+                let link = document.querySelector("link[rel*='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+        }
+
+        // 傳入圖片路徑，第二個參數 0.25 代表 25% 圓角
+        setRoundedFavicon('../images/icon-192.jpg', 0.25);
+    </script>
+</body>
+
+</html>
