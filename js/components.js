@@ -97,8 +97,9 @@ function renderFooter() {
           <div class="footer-col">
             <h4 class="footer-col-title">專案資訊</h4>
             <ul class="footer-links">
-              <li><a href="https://github.com" target="_blank" rel="noopener">GitHub 原始碼</a></li>
+              <li><a href="https://github.com/KevinChensinlong/Island-Codex" target="_blank" rel="noopener">GitHub 原始碼</a></li>
               <li><a href="https://github.com/KevinChensinlong/Island-Codex/blob/main/README.md#%E6%9B%B4%E6%96%B0%E6%97%A5%E8%AA%8C" target="_blank" rel="noopener">更新日誌</a></li>
+              <li><a href="https://github.com/KevinChensinlong/Island-Codex/issues" target="_blank" rel="noopener">回報問題</a></li>
             </ul>
           </div>
 
@@ -106,8 +107,11 @@ function renderFooter() {
           <div class="footer-col">
             <h4 class="footer-col-title">資料來源</h4>
             <ul class="footer-links">
-              <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap</a></li>
               <li><a href="https://zh.wikipedia.org" target="_blank" rel="noopener">維基百科</a></li>
+              <li><a href="https://data.gov.tw/dataset/33425" target="_blank" rel="noopener">政府資料開放平台</a></li>
+              <li><a href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap</a></li>
+              <li><a href="https://earth.google.com/" target="_blank" rel="noopener">Google Earth</a></li>
+              <li><a href="https://lucide.dev/" target="_blank" rel="noopener">Lucide Icons</a></li>
             </ul>
           </div>
         </div>

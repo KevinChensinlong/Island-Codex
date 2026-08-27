@@ -338,26 +338,19 @@
 }
 
 @media (max-width: 640px) {
-    .hero-section {
-        padding: 48px 16px 36px;
-    }
-
-    .hero-title {
-        font-size: 2.2rem;
-    }
-
     .hero-actions {
-        flex-direction: column;
+        flex-direction: row;     /* 改為橫向並排 */
+        justify-content: center; /* 居中 */
         gap: 10px;
-    }
-
-    .hero-actions .btn {
         width: 100%;
     }
 
-    .home-section {
-        margin: 36px auto;
-        padding: 0 16px;
+    .hero-actions .btn {
+        flex: 1;                 /* 兩顆按鈕平分寬度 */
+        max-width: 160px;        /* 限制各自的最大寬度 */
+        padding: 10px 12px;      /* 稍微縮小內距，確保小螢幕不塞爆 */
+        font-size: 0.9rem;
+        text-align: center;
     }
 }
 
@@ -571,3 +564,4 @@
     background: radial-gradient(circle at center, rgba(0, 180, 255, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
     border-top-color: rgba(255, 255, 255, 0.08);
 }
+

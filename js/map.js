@@ -1,5 +1,5 @@
 /**
- * 島嶼圖鑑 Island Codex - 地圖模組 (map.js) [效能加速版]
+ * 島嶼圖鑑 Island Codex - 地圖模組 (map.js) [Leaflet.markercluster 效能極速版]
  */
 
 let map = null;
@@ -18,18 +18,18 @@ const createDotIcon = (isVisited) => {
   });
 };
 
-// 初始化地圖 (已加入效能優化參數)
+// 初始化地圖 (已整合 Marker Cluster 聚合機制)
 function initMap() {
   if (map !== null) return;
 
-  // 1. 初始化地圖，關閉動畫以提升載入與滑動反應速度
+  // 1. 初始化地圖，開啟優雅動畫與 Canvas 渲染支援
   map = L.map('map', {
     zoomControl: false,          // 停用預設左上角縮放
     fullscreenControl: false,     // 停用自動初始化
-    fadeAnimation: true,         // 【恢復動畫】讓 Popup 彈窗恢復優雅的淡入淡出效果
+    fadeAnimation: true,         // Popup 彈窗淡入淡出效果
     zoomAnimation: true,
     markerZoomAnimation: true,
-    preferCanvas: true           // 【保留高效能】繼續使用 Canvas 渲染上百個點位，滑動依然流暢
+    preferCanvas: true           // 保留高效能繪圖機制
   }).setView([23.8, 120.96], 7);
 
   // 2. 建立 Leaflet 自訂定位控制項
@@ -78,13 +78,30 @@ function initMap() {
   // 4. 設定 TileLayer 快取與載入策略
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    keepBuffer: 8,            // 【加速重點】留在記憶體中的周圍圖塊數量（避免移動地圖時出現白塊）
-    updateWhenIdle: true,     // 【加速重點】滑動停止後才發送新請求，大幅降低手機 CPU 與網路負擔
-    updateWhenZooming: false, // 縮放過程中不重複請求中間層級的圖磚
+    keepBuffer: 8,            // 留在記憶體中的周圍圖塊數量
+    updateWhenIdle: true,     // 滑動停止後才發送新請求，降低 CPU 與網路負擔
+    updateWhenZooming: false, // 縮放過程中不重複請求中間層級圖磚
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-  markersGroup = L.layerGroup().addTo(map);
+  // 5. 初始化 MarkerClusterGroup (具備平滑動畫與分區延遲渲染機制)
+  if (typeof L.markerClusterGroup === 'function') {
+    markersGroup = L.markerClusterGroup({
+      chunkedLoading: true,        // 分段載入標記，避免大量數據造成 UI 凍結
+      chunkInterval: 100,          // 每隔 100ms 處理下一批點位
+      chunkDelay: 50,              // 分批渲染間隔時間
+      spiderfyOnMaxZoom: true,     // 同位置重疊點位在最大縮放時蜘蛛網狀展開
+      showCoverageOnHover: false,  // 滑過聚合圈時不顯示多邊形邊界（視覺更簡潔）
+      zoomToBoundsOnClick: true,   // 點擊聚合圈自動放大至該區域
+      maxClusterRadius: 45         // 聚合半徑 (像素)，兼顧散開細節與手機效能
+    });
+  } else {
+    // 若套件未載入，降級回傳統 LayerGroup
+    console.warn('Leaflet.markercluster 未載入，降級使用標準 L.layerGroup()');
+    markersGroup = L.layerGroup();
+  }
+
+  map.addLayer(markersGroup);
 }
 
 /**
@@ -204,7 +221,7 @@ function getUserLocation() {
   );
 }
 
-// 渲染圖標邏輯
+// 渲染圖標邏輯 (已搭配 markerClusterGroup 的批次新增優化)
 function renderMapMarkers(portsData = [], userCheckins = []) {
   if (!map) initMap();
   if (!markersGroup) return;
@@ -225,12 +242,16 @@ function renderMapMarkers(portsData = [], userCheckins = []) {
     }
   });
 
+  const markersToAdd = [];
+
   ports.forEach(spot => {
+    if (!spot.lat || !spot.lng) return;
+
     const currentSpotId = String(spot.id || spot.spotId || '');
     const userRecord = latestCheckinMap[currentSpotId];
     const isVisited = !!userRecord;
 
-    const marker = L.marker([spot.lat, spot.lng], { 
+    const marker = L.marker([Number(spot.lat), Number(spot.lng)], { 
       icon: createDotIcon(isVisited)
     });
 
@@ -246,7 +267,7 @@ function renderMapMarkers(portsData = [], userCheckins = []) {
 
     const popupContent = `
       <div style="text-align: center; font-family: sans-serif; padding: 4px;">
-        <h4 style="margin: 0 0 4px 0; font-size: 14px;">${spot.name}</h4>
+        <h4 style="margin: 0 0 4px 0; font-size: 14px;">${spot.name || '景點'}</h4>
         <p style="margin: 0 0 8px 0; font-size: 12px; color: #666;">${locationText}</p>
         <span style="display:inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; color: #fff; background: ${isVisited ? '#28a745' : '#6c757d'};">
           ${isVisited ? '✓ 已踩點' : '未踩點'}
@@ -255,8 +276,15 @@ function renderMapMarkers(portsData = [], userCheckins = []) {
     `;
 
     marker.bindPopup(popupContent);
-    markersGroup.addLayer(marker);
+    markersToAdd.push(marker);
   });
+
+  // 使用 addLayers 一次性批量傳入，大幅減少重繪開銷
+  if (typeof markersGroup.addLayers === 'function') {
+    markersGroup.addLayers(markersToAdd);
+  } else {
+    markersToAdd.forEach(m => markersGroup.addLayer(m));
+  }
 }
 
 window.updateMapMarkers = renderMapMarkers;
