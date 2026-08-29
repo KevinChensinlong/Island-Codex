@@ -16,6 +16,9 @@ function renderHeader() {
   // 判斷目前是否在「使用條款」頁面
   const isTermsPage = window.location.pathname.includes('terms.html');
 
+  // 判斷目前是否在「數據儀表板 (成就)」頁面
+  const isDashboardPage = window.location.pathname.includes('dashboard.html');
+
   // 判斷目前是否在「首頁」 (即網址為 index.html 或根目錄)
   const isHomePage = window.location.pathname.endsWith('/') || 
                      window.location.pathname.endsWith('/index.html') || 
@@ -47,8 +50,8 @@ function renderHeader() {
         </div>
       </div>
 
-      <!-- 當「不是首頁」且「不是使用條款頁」時，才渲染頂部分頁切換頁籤 -->
-      ${(!isHomePage && !isTermsPage) ? `
+      <!-- 當「不是首頁」、「不是使用條款頁」且「不是數據儀表板頁」時，才渲染頂部分頁切換頁籤 -->
+      ${(!isHomePage && !isTermsPage && !isDashboardPage) ? `
         <nav class="page-nav-tabs">
           <a href="${portLink}" class="nav-tab ${!isStationPage ? 'active' : ''}">港口圖鑑</a>
           <a href="${stationLink}" class="nav-tab ${isStationPage ? 'active' : ''}">臺鐵車站圖鑑</a>
@@ -346,7 +349,7 @@ async function handleCheckinSubmit(event, spotId) {
     window.allCheckinRecords = window.AppState.checkins; // 備份同步
     window.currentUserCheckins = window.AppState.checkins;
 
-    // ⚡【新增】同步更新 LocalStorage 本地快取，確保重新整理頁面後能秒開最新資料
+    // 同步更新 LocalStorage 本地快取，確保重新整理頁面後能秒開最新資料
     const cacheKey = `checkins_${currentUser.account}`;
     localStorage.setItem(cacheKey, JSON.stringify(window.AppState.checkins));
 

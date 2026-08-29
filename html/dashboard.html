@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>統計與成就</title>
+
+    <!-- 1. 網頁頁籤圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="../images/icon-192.jpg">
+    <!-- 2. Apple iOS 裝置主畫面圖示 -->
+    <link rel="apple-touch-icon" href="../images/icon-192.jpg">
+
+    <!-- 全域與元件 CSS 樣式 -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+    <!-- 引入 PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#007bff">
+
+    <!-- iOS (Safari) 專用設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- 獨立頁首 (由 components.js 動態渲染) -->
+        <div id="header-container"></div>
+
+        <!-- 主要內容區 -->
+        <main>
+            <!-- 全域資料載入進度條容器 (精準對齊主頁置中短進度條) -->
+            <div id="loading-progress-container" class="loading-progress-container" style="display: none; max-width: 380px; margin: 0 auto 16px auto; text-align: center;">
+                <p id="progress-text" class="progress-text" style="margin-bottom: 6px;">資料載入中... (0%)</p>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- 1. 港口與車站打卡總進度統計區塊 -->
+            <div class="nearest-port-container" style="margin-bottom: 16px;">
+                <div class="port-card nearest-port-card">
+                    <h3 class="port-title" style="margin-bottom: 16px;">踩點探索進度</h3>
+                    
+                    <!-- (A) 港口打卡進度 -->
+                    <div class="progress-item" style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-weight: 600; color: var(--text-primary);">漁港與港口踩點</span>
+                            <strong id="port-progress-text" style="color: var(--theme-primary, #38bdf8);">0 / 0 (0.0%)</strong>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="port-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- (B) 臺鐵車站打卡進度 -->
+                    <div class="progress-item">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-weight: 600; color: var(--text-primary);">臺鐵車站踩點</span>
+                            <strong id="station-progress-text" style="color: var(--theme-primary, #38bdf8);">0 / 0 (0.0%)</strong>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div id="station-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 成就解鎖總進度卡片區域 -->
+            <div class="nearest-port-container">
+                <div class="port-card nearest-port-card">
+                    <div class="nearest-card-header">
+                        <div class="nearest-badge-group">
+                            <span class="nearest-tag">成就解鎖總進度</span>
+                            <h3 id="achievement-overall-title" class="port-title">成就勳章集錦</h3>
+                            <p id="achievement-stats-desc" class="port-city">已解鎖 0 / 0 個成就</p>
+                        </div>
+                        <span id="achievement-percent-badge" class="nearest-dist-badge">0%</span>
+                    </div>
+                    <!-- 成就進度條 -->
+                    <div class="progress-wrapper" style="margin: 16px 0 0 0; padding: 0;">
+                        <div class="progress-bar-bg">
+                            <div id="achievement-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 分類篩選與控制區域 -->
+            <div class="search-filter-container">
+                <div class="filter-controls-group">
+                    <select id="categoryFilter" class="filter-control filter-select" onchange="handleCategoryChange()">
+                        <option value="all">全部成就類別</option>
+                        <option value="beginner">新手入門</option>
+                        <option value="region_port">區域港口</option>
+                        <option value="line_master">鐵道路線</option>
+                        <option value="milestone">數量里程碑</option>
+                        <option value="special">特別紀念</option>
+                    </select>
+                    <select id="statusFilter" class="filter-control filter-select" onchange="handleCategoryChange()">
+                        <option value="all">全部解鎖狀態</option>
+                        <option value="unlocked">已解鎖</option>
+                        <option value="locked">未解鎖</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 4. 成就卡片列表區域 -->
+            <div id="achievement-list" class="search-filter-container" style="display: grid; gap: 16px;">
+                <!-- 動態由 dashboard.js 渲染成就卡片 -->
+            </div>
+        </main>
+
+        <!-- 獨立頁尾 (由 components.js 動態渲染) -->
+        <div id="footer-container"></div>
+    </div>
+
+    <!-- 全域與業務邏輯腳本 (上一層 JS 目錄) -->
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/dashboard.js"></script>
+
+    <!-- PWA Service Worker 註冊 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../sw.js')
+                    .then(reg => console.log('Service Worker 註冊成功！', reg))
+                    .catch(err => console.error('Service Worker 註冊失敗：', err));
+            });
+        }
+    </script>
+
+    <!-- 動態生成 25% 圓角 Favicon -->
+    <script>
+        function setRoundedFavicon(iconUrl, borderRadiusRatio = 0.25) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = iconUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = img.width || 128;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                const radius = size * borderRadiusRatio;
+
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(size, 0, size, size, radius);
+                ctx.arcTo(size, size, 0, size, radius);
+                ctx.arcTo(0, size, 0, 0, radius);
+                ctx.arcTo(0, 0, size, 0, radius);
+                ctx.closePath();
+                ctx.clip();
+
+                ctx.drawImage(img, 0, 0, size, size);
+
+                let link = document.querySelector("link[rel*='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+        }
+
+        setRoundedFavicon('../images/icon-192.jpg', 0.25);
+    </script>
+</body>
+
+</html>

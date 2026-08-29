@@ -1,0 +1,302 @@
+[
+    {
+        "id": "ach_first_step",
+        "category": "beginner",
+        "title": "踩點新手",
+        "description": "完成首次車站或港口的打卡紀錄",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"6\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/></svg>",
+        "condition": {
+            "type": "total_count",
+            "target": 1
+        }
+    },
+    {
+        "id": "ach_ruifang_ports",
+        "category": "region_port",
+        "title": "瑞芳黃金海岸",
+        "description": "踏遍新北市瑞芳區所有的港口（深澳、水湳洞、南雅、鼻頭）",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\"/><path d=\"M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\"/><path d=\"M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_ntpc_017",
+                "port_ntpc_018",
+                "port_ntpc_019",
+                "port_ntpc_020"
+            ]
+        }
+    },
+    {
+        "id": "ach_keelung_harbor",
+        "category": "special",
+        "title": "雨港門戶",
+        "description": "造訪臺灣北部海運樞紐基隆港與基隆車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 22V8\"/><path d=\"M5 12H2a10 10 0 0 0 20 0h-3\"/><circle cx=\"12\" cy=\"5\" r=\"3\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_kee_001",
+                "TR_station_kee_0900"
+            ]
+        }
+    },
+    {
+        "id": "ach_sea_line_wooden",
+        "category": "line_master",
+        "title": "海線木造站房漫遊",
+        "description": "踩點海線著名的談文、大山、新埔與日南車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M8 31V7a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v24\"/><path d=\"M18 15h2a2 2 0 0 1 2 2v14\"/><path d=\"M4 11h2a2 2 0 0 1 2 2v18\"/><path d=\"M2 22h20\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_mia_2110",
+                "TR_station_mia_2120",
+                "TR_station_mia_2160",
+                "TR_station_txg_2190"
+            ]
+        }
+    },
+    {
+        "id": "ach_northeast_coast",
+        "category": "special",
+        "title": "東北角鐵道風華",
+        "description": "走訪宜蘭線瑞芳、猴硐、福隆與石城車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m8 6 4-4 4 4\"/><path d=\"M12 2v10.3a4 4 0 0 1-1.17 2.83L4 22\"/><path d=\"M20 22l-6.83-6.87A4 4 0 0 1 12 12.3\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_ntpc_7360",
+                "TR_station_ntpc_7350",
+                "TR_station_ntpc_7290",
+                "TR_station_ila_7280"
+            ]
+        }
+    },
+    {
+        "id": "ach_extreme_east",
+        "category": "special",
+        "title": "極東采風",
+        "description": "踏足臺灣本島最東邊的馬崗漁港與極東車站石城",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/><path d=\"M12 2v4\"/><path d=\"M22 12h-4\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_ntpc_029",
+                "TR_station_ila_7280"
+            ]
+        }
+    },
+    {
+        "id": "ach_double_north_hub",
+        "category": "region_port",
+        "title": "雙北核心特快",
+        "description": "走訪臺北車站、南港車站、板橋車站與臺北港",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"2\"/><path d=\"M9 8h6\"/><path d=\"M9 12h6\"/><path d=\"M9 16h6\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_tpe_1000",
+                "TR_station_tpe_0980",
+                "TR_station_ntpc_1020",
+                "port_ntpc_001"
+            ]
+        }
+    },
+    {
+        "id": "ach_gongliao_coast",
+        "category": "region_port",
+        "title": "貢寮山海大縱走",
+        "description": "踩點貢寮區四大名港（澳底、福隆、卯澳、馬崗漁港）",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 20a6 6 0 0 1 12 0\"/><path d=\"M10 20a6 6 0 0 1 12 0\"/><path d=\"M12 10V4a2 2 0 0 1 2-2h4\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_ntpc_024",
+                "port_ntpc_027",
+                "port_ntpc_028",
+                "port_ntpc_029"
+            ]
+        }
+    },
+    {
+        "id": "ach_north_coast_line",
+        "category": "special",
+        "title": "北海岸風情畫",
+        "description": "漫遊淡水第二漁港（漁人碼頭）、富基漁港與野柳漁港",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17.5 19 12 3 6.5 19.5\"/><path d=\"m10 14 4.5 1\"/><path d=\"M2 21h20\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_ntpc_004",
+                "port_ntpc_008",
+                "port_ntpc_013"
+            ]
+        }
+    },
+    {
+        "id": "ach_yilan_gateway",
+        "category": "region_port",
+        "title": "蘭陽鐵道第一站",
+        "description": "走訪頭城、礁溪、宜蘭與羅東四大宜蘭線樞紐",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z\"/><line x1=\"4\" x2=\"4\" y1=\"22\" y2=\"15\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_ila_7230",
+                "TR_station_ila_7210",
+                "TR_station_ila_7190",
+                "TR_station_ila_7160"
+            ]
+        }
+    },
+    {
+        "id": "ach_station_collector_10",
+        "category": "milestone",
+        "title": "鐵道收藏家",
+        "description": "解鎖任意 10 個臺鐵車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"16\" height=\"16\" x=\"4\" y=\"4\" rx=\"2\"/><path d=\"M4 11h16\"/><path d=\"M12 4v16\"/></svg>",
+        "condition": {
+            "type": "target_type_count",
+            "targetType": "station",
+            "target": 10
+        }
+    },
+    {
+        "id": "ach_port_master_10",
+        "category": "milestone",
+        "title": "大航海時代",
+        "description": "累積踩點任意 10 個漁港或商港",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M16.2 7.8 12 12l-1.8 4.2L12 12l4.2-4.2z\"/></svg>",
+        "condition": {
+            "type": "target_type_count",
+            "targetType": "port",
+            "target": 10
+        }
+    },
+    {
+        "id": "ach_station_collector_30",
+        "category": "milestone",
+        "title": "鐵道狂熱者",
+        "description": "解鎖任意 30 個臺鐵車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v20\"/><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg>",
+        "condition": {
+            "type": "target_type_count",
+            "targetType": "station",
+            "target": 30
+        }
+    },
+    {
+        "id": "ach_main_line_north",
+        "category": "line_master",
+        "title": "縱貫線北段通勤巡禮",
+        "description": "走訪七堵、汐止、南港、臺北與板橋車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 6 6 18\"/><path d=\"m6 6 12 18\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_kee_0930",
+                "TR_station_ntpc_0960",
+                "TR_station_tpe_0980",
+                "TR_station_tpe_1000",
+                "TR_station_ntpc_1020"
+            ]
+        }
+    },
+    {
+        "id": "ach_taoyuan_hsinchu_corridor",
+        "category": "region_port",
+        "title": "桃竹沿海門戶",
+        "description": "踩點竹圍漁港、永安漁港與新竹漁港（南寮漁港）",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 12h20\"/><path d=\"M20 12v8H4v-8\"/><path d=\"m6 12 6-8 6 8\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_tao_001",
+                "port_tao_002",
+                "port_hsz_001"
+            ]
+        }
+    },
+    {
+        "id": "ach_miaoli_mountain_sea",
+        "category": "line_master",
+        "title": "山海交會之境",
+        "description": "走訪海線分岐點竹南車站與山線樞紐苗栗車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m8 3 4 8 5-5 5 15H2L8 3z\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_mia_1250",
+                "TR_station_mia_3160"
+            ]
+        }
+    },
+    {
+        "id": "ach_taichung_coastal_ports",
+        "category": "region_port",
+        "title": "中臺灣海港風華",
+        "description": "踩點臺中港與梧棲漁港",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M22 18H2a10 10 0 0 1 20 0Z\"/><path d=\"M6 18v-4a6 6 0 0 1 12 0v4\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "port_txg_001",
+                "port_txg_002"
+            ]
+        }
+    },
+    {
+        "id": "ach_cheng_zhui_line",
+        "category": "special",
+        "title": "追分成功吉祥特快",
+        "description": "解鎖鐵道迷必訪的追分車站與成功車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_txg_2260",
+                "TR_station_txg_3350"
+            ]
+        }
+    },
+    {
+        "id": "ach_southern_hubs",
+        "category": "line_master",
+        "title": "府城與港都玄關",
+        "description": "走訪臺南車站、新左營車站、高雄車站與屏東車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg>",
+        "condition": {
+            "type": "specific_list",
+            "targetIds": [
+                "TR_station_tnn_4220",
+                "TR_station_khh_4340",
+                "TR_station_khh_4400",
+                "TR_station_pif_5000"
+            ]
+        }
+    },
+    {
+        "id": "ach_station_collector_50",
+        "category": "milestone",
+        "title": "百站半途半端",
+        "description": "累積解鎖任意 50 個臺鐵車站",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 9H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-2\"/><path d=\"M6 5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4H6Z\"/></svg>",
+        "condition": {
+            "type": "target_type_count",
+            "targetType": "station",
+            "target": 50
+        }
+    },
+    {
+        "id": "ach_port_master_20",
+        "category": "milestone",
+        "title": "海岸線霸主",
+        "description": "累積踩點任意 20 個漁港與港口",
+        "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v20\"/><path d=\"m19 9-7 7-7-7\"/></svg>",
+        "condition": {
+            "type": "target_type_count",
+            "targetType": "port",
+            "target": 20
+        }
+    }
+]

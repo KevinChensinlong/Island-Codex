@@ -1,0 +1,186 @@
+/* =========================================
+   Dashboard (成就與統計儀表板) 專用樣式
+   ========================================= */
+
+/* -----------------------------------------
+   1. 暗色模式文字對比度優化 (Dark Mode Enhancements)
+   ----------------------------------------- */
+body[data-theme="dark"] {
+  --text-secondary: #d1d5db;
+  --text-footer-secondary: #cbd5e1;
+  --text-footer-muted: #94a3b8;
+}
+
+/* -----------------------------------------
+   2. 成就卡片網格與基本佈局
+   ----------------------------------------- */
+#achievement-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.achievement-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background-color: var(--bg-card, #ffffff);
+  border-radius: var(--radius-md, 12px);
+  padding: 18px 20px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.05));
+  box-sizing: border-box;
+}
+
+/* 滑鼠觸碰完全無互動、不變色、無位移與藍框 */
+.achievement-card:hover {
+  /* 保持靜止 */
+}
+
+/* -----------------------------------------
+   3. 成就圖示樣式
+   ----------------------------------------- */
+.achievement-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background-color: rgba(0, 123, 255, 0.12);
+  color: var(--accent-color, #007bff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.achievement-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
+}
+
+/* -----------------------------------------
+   4. 成就內容與文字層級 (相容 JS 自動產生的 DOM)
+   ----------------------------------------- */
+.achievement-info {
+  flex: 1;
+  min-width: 0;
+  padding-right: 4px;
+}
+
+/* 相容包含 inline style 的 JS 動態結構，強行設定下外邊距 */
+.achievement-info > div:first-child,
+.achievement-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important; /* 顯著加大【未解鎖】標籤列與下方描述的距離 */
+}
+
+.achievement-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary, #1a1a1a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #475569);
+  margin: 0;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+/* -----------------------------------------
+   5. 解鎖狀態膠囊標籤
+   ----------------------------------------- */
+.status-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* 已解鎖狀態 */
+.achievement-card.unlocked {
+  border-color: rgba(40, 167, 69, 0.3);
+}
+
+.achievement-card.unlocked .achievement-icon {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+}
+
+/* 未解鎖狀態 */
+.achievement-card.locked {
+  opacity: 0.85;
+  background-color: var(--bg-card);
+}
+
+.achievement-card.locked .achievement-icon {
+  background-color: var(--border-color, #e2e8f0);
+  color: var(--text-footer-muted, #94a3b8);
+  filter: grayscale(100%);
+}
+
+body[data-theme="dark"] .achievement-card.locked .achievement-icon {
+  background-color: #2a2a2d;
+  color: #94a3b8;
+}
+
+body[data-theme="dark"] .status-unvisited {
+  background-color: #2a2a2d;
+  color: #d1d5db;
+  border: 1px solid #3f3f46;
+}
+
+/* -----------------------------------------
+   6. 響應式佈局調整 (Responsive RWD)
+   ----------------------------------------- */
+@media (max-width: 600px) {
+  #achievement-list {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+    margin: 12px auto;
+  }
+
+  .achievement-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .achievement-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .achievement-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .achievement-title {
+    font-size: 0.98rem;
+  }
+
+  .achievement-desc {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
