@@ -9,9 +9,13 @@ const basePath = isInHtmlDir ? '../' : './';
 // 渲染獨立頁首 (包含登入狀態與分頁頁籤)
 function renderHeader() {
   const currentUser = (typeof getCurrentUser === 'function') ? getCurrentUser() : null;
+  
   // 透過網址判斷目前是否在「臺鐵車站」頁面
   const isStationPage = window.location.pathname.includes('TR_stations.html');
   
+  // 判斷目前是否在「使用條款」頁面
+  const isTermsPage = window.location.pathname.includes('terms.html');
+
   // 判斷目前是否在「首頁」 (即網址為 index.html 或根目錄)
   const isHomePage = window.location.pathname.endsWith('/') || 
                      window.location.pathname.endsWith('/index.html') || 
@@ -43,8 +47,8 @@ function renderHeader() {
         </div>
       </div>
 
-      <!-- 當「不是首頁」時，才渲染頂部分頁切換頁籤 -->
-      ${!isHomePage ? `
+      <!-- 當「不是首頁」且「不是使用條款頁」時，才渲染頂部分頁切換頁籤 -->
+      ${(!isHomePage && !isTermsPage) ? `
         <nav class="page-nav-tabs">
           <a href="${portLink}" class="nav-tab ${!isStationPage ? 'active' : ''}">港口圖鑑</a>
           <a href="${stationLink}" class="nav-tab ${isStationPage ? 'active' : ''}">臺鐵車站圖鑑</a>
@@ -84,12 +88,11 @@ function renderFooter() {
 
         <!-- 右側：多類別連結欄位 -->
         <div class="footer-links-grid">
-          <!-- 類別 1：圖鑑導覽 -->
+          <!-- 類別 1：內容規範 -->
           <div class="footer-col">
-            <h4 class="footer-col-title">圖鑑導覽</h4>
+            <h4 class="footer-col-title">內容規範</h4>
             <ul class="footer-links">
-              <li><a href="${portLink}">港口圖鑑</a></li>
-              <li><a href="${stationLink}">臺鐵車站圖鑑</a></li>
+              <li><a href="../html/terms.html">使用條款</a></li>
             </ul>
           </div>
 

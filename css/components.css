@@ -1,9 +1,29 @@
 /* =========================================
-   組件樣式 (Header, Footer, Buttons, Cards)
+   1. 主題變數 (Variables)
    ========================================= */
+:root {
+  --bg-footer: #ffffff;
+  --border-footer: #e2e8f0;
+  --text-footer-primary: #0f172a;
+  --text-footer-secondary: #475569;
+  --text-footer-muted: #94a3b8;
+}
 
+body[data-theme="dark"] {
+  --bg-footer: #121214;
+  --border-footer: #27272a;
+  --text-footer-primary: #f4f4f5;
+  --text-footer-secondary: #a1a1aa;
+  --text-footer-muted: #71717a;
+}
 
-   /* 頁首與頁尾 */
+/* =========================================
+   2. 頁首與品牌區域 (Header & Brand)
+   ========================================= */
+.site-header-wrapper {
+  box-sizing: border-box;
+}
+
 .site-header {
   padding: 16px;
   display: flex;
@@ -15,19 +35,6 @@
   z-index: 1000;
   max-width: 800px;
   margin: 0 auto;
-}
-
-/* 頁首樣式 */
-.site-header {
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  background-color: var(--bg-body);
-  /* 與背景融合 */
-  z-index: 1000;
   transition: background-color 0.15s ease;
 }
 
@@ -36,15 +43,82 @@
   font-weight: 700;
 }
 
-/* 頁尾樣式 */
-.site-footer {
-  text-align: center;
-  padding: 24px 16px 12px;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
 }
 
-/* 按鈕樣式 */
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 20%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.logo-area {
+  flex-shrink: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.user-welcome {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-right: 8px;
+}
+
+/* =========================================
+   3. 頂部分頁導覽 (Page Nav Tabs)
+   ========================================= */
+.page-nav-tabs {
+  display: flex;
+  gap: 10px;
+  padding: 0 20px 12px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm, 8px);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary, #666);
+  background-color: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  color: var(--primary-color, #007bff);
+  border-color: var(--primary-color, #007bff);
+}
+
+.nav-tab.active {
+  color: #ffffff;
+  background-color: var(--primary-color, #007bff);
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
+}
+
+/* =========================================
+   4. 通用按鈕樣式 (Buttons)
+   ========================================= */
 .btn {
   padding: 8px 16px;
   border: none;
@@ -52,11 +126,13 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
+  line-height: 1.5;
   transition: all 0.2s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: none;
 }
 
 .btn-primary {
@@ -78,7 +154,121 @@
   background-color: var(--border-color);
 }
 
-/* 卡片與列表樣式 */
+.btn-block {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.checkin-btn.visited,
+.checkin-btn.is-visited {
+  background-color: #28a745 !important;
+  color: #ffffff !important;
+  border-color: #28a745 !important;
+}
+
+.locate-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  width: 36px;
+  height: 36px;
+  background-color: var(--bg-card, #1e1e1e);
+  color: var(--text-primary, #ffffff);
+  border: 1px solid var(--border-color, #333333);
+  border-radius: var(--radius-sm, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.locate-btn:hover {
+  background-color: #007bff;
+  color: #ffffff;
+  border-color: #007bff;
+}
+
+/* =========================================
+   5. 搜尋與多重篩選器 (Search & Filters)
+   ========================================= */
+.search-filter-container {
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary, #888888);
+  opacity: 0.8;
+}
+
+.filter-controls-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.filter-control {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color, #dcdfe6);
+  border-radius: var(--radius-sm, 8px);
+  background-color: var(--bg-card, #ffffff);
+  color: var(--text-primary, #1a1a1a) !important;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.search-input:focus,
+.filter-select:focus:not(:disabled) {
+  border-color: var(--accent-color, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+#townFilter,
+#townFilter:disabled {
+  background-color: var(--bg-card, #ffffff) !important;
+  color: var(--text-primary, #1a1a1a) !important;
+  border-color: var(--border-color, #dcdfe6) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* =========================================
+   6. 卡片與列表 (Cards & Port Items)
+   ========================================= */
 #port-list {
   padding: 0 16px;
   display: grid;
@@ -166,7 +356,51 @@
   border-radius: var(--radius-md);
 }
 
-/* 維基百科簡介區塊 */
+/* 最近港口卡片 */
+.nearest-port-container {
+  max-width: 800px;
+  margin: 16px auto 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.nearest-port-card {
+  margin-bottom: 0;
+}
+
+.nearest-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.nearest-badge-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nearest-tag {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0084ff;
+  margin-bottom: 2px;
+}
+
+.nearest-dist-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0084ff;
+  background-color: rgba(0, 123, 255, 0.12);
+  border: 1px solid rgba(0, 123, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* =========================================
+   7. 維基百科簡介區塊 (Wiki Component)
+   ========================================= */
 .wiki-container {
   display: none;
   margin-top: 12px;
@@ -182,14 +416,14 @@
   display: block;
 }
 
-.wiki-loading, .wiki-error {
+.wiki-loading, 
+.wiki-error {
   color: var(--text-secondary);
   font-size: 13px;
   text-align: center;
   padding: 8px 0;
 }
 
-/* 圖片容器：不設固定高度，維持原圖完整比例 */
 .wiki-photo-box {
   margin-bottom: 12px;
   border-radius: var(--radius-sm);
@@ -199,9 +433,25 @@
 
 .wiki-photo-box img {
   width: 100%;
-  height: auto; /* 自動依比例調整高度 */
+  height: auto;
   display: block;
   border-radius: var(--radius-sm);
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wiki-photo-box img.wiki-thumb-img {
+  cursor: pointer;
+}
+
+.wiki-photo-box img.wiki-thumb-img:hover {
+  filter: brightness(0.95);
+  opacity: 0.99;
+}
+
+.wiki-photo-box img.is-high-res {
+  cursor: default;
+  filter: none !important;
+  opacity: 1 !important;
 }
 
 .wiki-text {
@@ -210,7 +460,9 @@
   text-align: justify;
 }
 
-/* 登入 Modal 樣式 */
+/* =========================================
+   8. 對話框與 Modal (Dialogs & Modals)
+   ========================================= */
 .auth-dialog {
   border: none;
   background: var(--bg-card);
@@ -240,62 +492,6 @@
   margin-bottom: 20px;
 }
 
-.form-group {
-  margin-bottom: 16px;
-}
-
-/* 確保彈窗中的文字框與輸入框樣式統一 */
-.auth-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-body);
-  color: var(--text-primary);
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, background-color 0.15s ease;
-}
-
-.auth-input:focus {
-  border-color: var(--accent-color);
-}
-
-.btn-block {
-  width: 100%;
-  margin-top: 8px;
-}
-
-.auth-footer {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
-  text-align: center;
-}
-
-.auth-footer p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.btn-text {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  cursor: pointer;
-  margin-top: 12px;
-}
-
-.user-welcome {
-  font-size: 0.9rem;
-  color: var(--text-primary);
-  margin-right: 8px;
-}
-
-/* 登入 Modal 增強 */
 .auth-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
@@ -342,87 +538,63 @@
   font-size: 14px;
   outline: none;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, background-color 0.15s ease;
 }
 
 .auth-input:focus {
   border-color: var(--accent-color);
 }
 
+.auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.auth-actions .btn-text {
+  margin-top: 0;
+  padding: 8px 12px;
+}
+
 .auth-footer {
   margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
   text-align: center;
 }
 
-/* 提示訊息容器 */
+.auth-footer p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
 .auth-msg {
   width: 100%;
   padding: 10px 14px;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  margin: 12px 0; /* 上下加上適當間距 */
+  margin: 12px 0;
   text-align: center;
   line-height: 1.4;
   box-sizing: border-box;
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* 錯誤提示 (紅底淺紅字) */
 .auth-msg.error {
   background-color: rgba(220, 53, 69, 0.12);
   color: #ff6b6b;
   border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
-/* 成功提示 (綠底淺綠字) */
 .auth-msg.success {
   background-color: rgba(40, 167, 69, 0.12);
   color: #51cf66;
   border: 1px solid rgba(40, 167, 69, 0.3);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 維基百科圖片優化樣式 */
-.wiki-photo-box img {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-sm);
-  display: block;
-  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-}
-
-/* 1. 預設低畫質縮圖：提示可點擊、Hover 降低明亮度/深度 */
-.wiki-photo-box img.wiki-thumb-img {
-  cursor: pointer;
-}
-
-.wiki-photo-box img.wiki-thumb-img:hover {
-  filter: brightness(0.95); /* 滑鼠移上去時明亮度降低（變暗深度下降） */
-  opacity: 0.99;
-}
-
-/* 2. 已載入高畫質原圖：恢復原始深度、取消 Hover 變色與手型指標 */
-.wiki-photo-box img.is-high-res {
-  cursor: default;
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-/* 統一 Modal 內按鈕與卡片按鈕樣式 */
-#checkin-dialog .btn,
-#auth-dialog .btn {
-  border-radius: var(--radius-sm);  /* 統一圓角 */
-  padding: 8px 16px;                 /* 統一按鈕上下左右邊距 */
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
-  box-shadow: none;                  /* 移除多餘陰影 */
-}
-
-/* 確保藍色主要按鈕背景色完全一致 */
 #checkin-dialog .btn-primary,
 #auth-dialog .btn-primary {
   background-color: var(--accent-color);
@@ -435,22 +607,9 @@
   opacity: 0.9;
 }
 
-/* 1. 確保彈窗底部的按鈕容器採用 Flexbox 並垂直置中對齊 */
-.auth-actions {
-  display: flex;
-  align-items: center; /* 關鍵：讓子元素垂直置中 */
-  gap: 8px;
-  justify-content: flex-end;
-  margin-top: 16px;
-}
-
-/* 2. 重置取消按鈕多餘的上邊距 (margin-top) */
-.auth-actions .btn-text {
-  margin-top: 0;
-  padding: 8px 12px; /* 增加點擊範圍並保持高度比例 */
-}
-
-/* 進度條外層容器 */
+/* =========================================
+   9. 進度條與地圖元件 (Progress & Leaflet)
+   ========================================= */
 .progress-wrapper {
   margin: 20px auto;
   max-width: 400px;
@@ -464,7 +623,6 @@
   color: var(--text-secondary, #666);
 }
 
-/* 進度條軌道 */
 .progress-bar-bg {
   width: 100%;
   height: 8px;
@@ -473,7 +631,6 @@
   overflow: hidden;
 }
 
-/* 進度條填滿動畫 */
 .progress-bar-fill {
   width: 0%;
   height: 100%;
@@ -482,149 +639,6 @@
   transition: width 0.3s ease-in-out;
 }
 
-/* ==========================================
-   搜尋與多重篩選器樣式 (Search & Multi-Filter)
-   ========================================== */
-.search-filter-container {
-  max-width: 800px;
-  margin: 16px auto;
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-sizing: border-box;
-}
-
-.search-box {
-  width: 100%;
-}
-
-.filter-controls-group {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
-
-.filter-control {
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid var(--border-color, #dcdfe6);
-  border-radius: var(--radius-sm, 8px);
-  background-color: var(--bg-card, #ffffff);
-  color: var(--text-primary, #1a1a1a) !important;
-  font-size: 14px;
-  font-weight: 500;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
-}
-
-.search-input {
-  width: 100%;
-}
-
-.filter-select {
-  flex: 1;
-  min-width: 0; /* 防止下拉選單在 flex 佈局下溢出 */
-  cursor: pointer;
-}
-
-.search-input::placeholder {
-  color: var(--text-secondary, #888888);
-  opacity: 0.8;
-}
-
-.search-input:focus,
-.filter-select:focus:not(:disabled) {
-  border-color: var(--accent-color, #007bff);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-}
-
-/* 按鈕踩點狀態樣式 */
-.checkin-btn.visited,
-.checkin-btn.is-visited {
-  background-color: #28a745 !important;
-  color: #ffffff !important;
-  border-color: #28a745 !important;
-}
-
-/* 手機直向適應 (螢幕寬度小於 600px 時改為兩欄/堆疊) */
-@media (max-width: 600px) {
-  .search-filter-container {
-    padding: 0 12px;
-    margin: 12px auto;
-  }
-
-  .filter-controls-group {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-
-  .filter-control {
-    height: 38px;
-    font-size: 13px;
-    padding: 0 6px;
-  }
-}
-
-/* 強制鄉鎮市區選單不論在任何時間點均維持統一深色外觀，絕不反灰 */
-#townFilter,
-#townFilter:disabled {
-  background-color: var(--bg-card, #ffffff) !important;
-  color: var(--text-primary, #1a1a1a) !important;
-  border-color: var(--border-color, #dcdfe6) !important;
-  opacity: 1 !important;
-  cursor: pointer !important;
-}
-
-/* 品牌標題區域：確保圖片與文字在同一行並垂直置中 */
-.brand-title {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* 圖片與文字之間的間距 */
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0;
-}
-
-/* 調整 Logo 縮圖尺寸與樣式 */
-.brand-logo {
-  width: 28px;            /* 縮小寬度（可依喜好微調為 24px - 32px） */
-  height: 28px;           /* 縮小高度 */
-  border-radius: 20%;     /* 裁切為圓形 */
-  object-fit: cover;      /* 確保圖片不變形 */
-  flex-shrink: 0;         /* 避免被壓縮 */
-  display: inline-block;
-}
-
-/* 定位按鈕樣式 */
-.locate-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1000;
-  width: 36px;
-  height: 36px;
-  background-color: var(--bg-card, #1e1e1e);
-  color: var(--text-primary, #ffffff);
-  border: 1px solid var(--border-color, #333333);
-  border-radius: var(--radius-sm, 8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
-}
-
-.locate-btn:hover {
-  background-color: #007bff;
-  color: #ffffff;
-  border-color: #007bff;
-}
-
-/* 使用者定位藍點樣式 */
 .user-location-dot {
   width: 14px;
   height: 14px;
@@ -635,423 +649,18 @@
   animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
-  70% { box-shadow: 0 0 0 12px rgba(0, 123, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
-}
-
-/* ==========================================
-   最近港口卡片專用樣式 (與搜尋欄及卡片對齊)
-   ========================================== */
-
-/* 外層容器：確保最大寬度與左右 Padding 與搜尋欄一致 */
-.nearest-port-container {
-  max-width: 800px;
-  margin: 16px auto 0 auto;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-
-/* 卡片本身樣式 */
-.nearest-port-card {
-  margin-bottom: 0;
-}
-
-/* 頂部佈局：將資訊與距離標籤分開左右兩側 */
-.nearest-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.nearest-badge-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* 「距離您最近港口」藍色主題標籤 */
-.nearest-tag {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0084ff;
-  margin-bottom: 2px;
-}
-
-/* 距離數字藍色圓框膠囊 */
-.nearest-dist-badge {
-  font-size: 13px;
-  font-weight: 600;
-  color: #0084ff;
-  background-color: rgba(0, 123, 255, 0.12);
-  border: 1px solid rgba(0, 123, 255, 0.3);
-  padding: 4px 12px;
-  border-radius: 20px;
-  white-space: nowrap;
-}
-
-/* 手機版適應 (與搜尋欄齊平) */
-@media (max-width: 600px) {
-  .nearest-port-container {
-    padding: 0 12px;
-    margin-top: 12px;
-  }
-}
-
-/* ==========================================================================
-   頂部分頁切換頁籤 (Tab Bar) 樣式
-   ========================================================================== */
-.page-nav-tabs {
-  display: flex;
-  gap: 10px;
-  padding: 0 20px 12px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.nav-tab {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm, 8px);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary, #666);
-  background-color: var(--bg-card, #ffffff);
-  border: 1px solid var(--border-color, #e0e0e0);
-  transition: all 0.2s ease;
-}
-
-.nav-tab:hover {
-  color: var(--primary-color, #007bff);
-  border-color: var(--primary-color, #007bff);
-}
-
-.nav-tab.active {
-  color: #ffffff;
-  background-color: var(--primary-color, #007bff);
-  border-color: var(--primary-color, #007bff);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25);
-}
-
-/* --------------------------------------------------
- * 手機版 Header 導覽列 RWD 視覺優化
- * -------------------------------------------------- */
-@media (max-width: 768px) {
-  /* 頂部外層容器 */
-  .site-header-wrapper {
-    padding: 10px 12px;
-  }
-
-  /* 第一排：Logo 與 右側功能按鈕 */
-  .site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .logo-area {
-    flex-shrink: 0;
-  }
-
-  .brand-title {
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-  }
-
-  .brand-logo {
-    width: 28px;
-    height: 28px;
-  }
-
-  /* 右側使用者資訊與按鈕組 */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  /* 使用者歡迎文字縮小，避免擠壓 */
-  .user-welcome {
-    font-size: 0.75rem;
-    color: var(--text-secondary, #aaa);
-    max-width: 110px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* 按鈕尺寸微調適合手機點擊 */
-  .header-actions .btn {
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-  }
-
-  /* 第二排：分頁切換頁籤 (港口圖鑑 / 臺鐵車站圖鑑) */
-  .page-nav-tabs {
-    display: flex;
-    width: 100%;
-    gap: 8px;
-    margin-top: 4px;
-  }
-
-  .page-nav-tabs .nav-tab {
-    flex: 1;
-    text-align: center;
-    padding: 8px 0;
-    font-size: 0.85rem;
-    border-radius: 6px;
-  }
-}
-
-
-/* --------------------------------------------------
- * 手機版 Header 導覽列 RWD 視覺優化 (徹底解決溢出版)
- * -------------------------------------------------- */
-@media (max-width: 768px) {
-  /* 頂部外層容器：確保不產生橫向滾動條 */
-  .site-header-wrapper {
-    padding: 8px 12px;
-    overflow-x: hidden;
-  }
-
-  /* 第一排容器：允許必要時換行 */
-  .site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* 關鍵：寬度不夠時自動換行，絕不溢出 */
-    gap: 8px;
-    margin-bottom: 10px;
-    padding: 4px 0;
-  }
-
-  .logo-area {
-    flex-shrink: 0;
-  }
-
-  .brand-title {
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-  }
-
-  .brand-logo {
-    width: 26px;
-    height: 26px;
-  }
-
-  /* 右側使用者資訊與按鈕組 */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-    flex-wrap: wrap; /* 子元素空間不足時彈性換行 */
-  }
-
-  /* 使用者歡迎文字：手機版縮小並限制最大寬度 */
-  .user-welcome {
-    font-size: 0.75rem;
-    color: var(--text-secondary, #aaa);
-    max-width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  /* 按鈕樣式：適度縮減邊距以完整容納於手機螢幕 */
-  .header-actions .btn {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* 第二排：分頁切換頁籤 (港口圖鑑 / 臺鐵車站圖鑑) */
-  .page-nav-tabs {
-    display: flex;
-    width: 100%;
-    gap: 8px;
-    margin-top: 4px;
-    padding: 0;
-  }
-
-  .page-nav-tabs .nav-tab {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
-    padding: 8px 0;
-    font-size: 0.85rem;
-    border-radius: var(--radius-sm, 8px);
-  }
-}
-
-/* ==========================================
-   地圖彈窗 (Popup) 加速與視覺優化
-   ========================================== */
-
-/* 1. 縮短 Popup 淡入與位移的動畫時間（從預設約 0.3s 降至 0.12s） */
 .leaflet-popup-fade-anim {
   transition: opacity 0.12s cubic-bezier(0, 0, 0.2, 1), 
               transform 0.12s cubic-bezier(0, 0, 0.2, 1) !important;
 }
 
-/* 2. 微調縮放（Zoom）與圖層變換的過渡動畫，讓整體反應更靈敏 */
 .leaflet-zoom-anim .leaflet-zoom-animated {
   transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1) !important;
 }
 
-
-/* ==========================================
-   卡片區域齊頭 & 欄位緊湊置中頁尾
-   ========================================== */
-.site-footer {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  margin-top: 56px;
-  padding: 48px 0 36px;
-  background-color: #121214;
-  border-top: 1px solid #27272a;
-  box-sizing: border-box;
-}
-
-/* 限制最大寬度與上方卡片完全一致（例如 800px / 900px），並維持 margin: 0 auto 置中 */
-.footer-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 56px;
-  box-sizing: border-box;
-}
-
-/* 左側品牌區 */
-.footer-brand-col {
-  width: 260px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  text-align: left;
-}
-
-.footer-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.brand-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-}
-
-/* 預設（淺色模式）文字顏色 */
-.footer-brand-title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-primary, #0f172a);
-}
-
-.footer-desc {
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--text-secondary, #475569);
-  margin: 0;
-  text-align: left;
-}
-
-.copyright {
-  font-size: 0.82rem;
-  color: var(--text-secondary, #94a3b8);
-  margin-top: 4px;
-  text-align: left;
-}
-
-/* 右側 3 個欄位緊湊相連 */
-.footer-links-grid {
-  display: flex;
-  gap: 48px;
-  text-align: left;
-}
-
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.footer-col-title {
-  font-size: 1.02rem;
-  font-weight: 600;
-  color: var(--text-primary, #0f172a);
-  margin: 0 0 14px 0;
-}
-
-.footer-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
-
-.footer-links a {
-  font-size: 0.9rem;
-  color: var(--text-secondary, #475569);
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.footer-links a:hover {
-  color: var(--accent-color, #007bff);
-}
-
-/* ==========================================
-   主題變數定義 (請確保 CSS 最上方有定義，或直接加在元件檔案中)
-   ========================================== */
-:root {
-  --bg-footer: #ffffff;          /* 淺色模式頁尾背景：純白/淺灰 */
-  --border-footer: #e2e8f0;      /* 淺色模式頁尾頂部邊框 */
-  --text-footer-primary: #0f172a;/* 淺色模式頁尾標題黑字 */
-  --text-footer-secondary: #475569;/* 淺色模式頁尾內文灰字 */
-  --text-footer-muted: #94a3b8;  /* 淺色模式版權淡灰字 */
-}
-
-/* 當 body 帶有 data-theme="dark" 時覆蓋變數 */
-body[data-theme="dark"] {
-  --bg-footer: #121214;          /* 深色模式頁尾背景 */
-  --border-footer: #27272a;      /* 深色模式頁尾頂部邊框 */
-  --text-footer-primary: #f4f4f5;/* 深色模式頁尾標題白字 */
-  --text-footer-secondary: #a1a1aa;/* 深色模式頁尾內文灰字 */
-  --text-footer-muted: #71717a;  /* 深色模式版權灰字 */
-}
-
-/* ==========================================
-   頁尾外層區塊
-   ========================================== */
+/* =========================================
+   10. 頁尾樣式 (Footer)
+   ========================================= */
 .site-footer {
   width: 100vw;
   position: relative;
@@ -1064,12 +673,12 @@ body[data-theme="dark"] {
   background-color: var(--bg-footer);
   border-top: 1px solid var(--border-footer);
   box-sizing: border-box;
+  text-align: center;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* 限制最大寬度與上方卡片完全一致 */
 .footer-container {
-  max-width: 800px; 
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 16px;
   display: flex;
@@ -1079,7 +688,6 @@ body[data-theme="dark"] {
   box-sizing: border-box;
 }
 
-/* 左側品牌區 */
 .footer-brand-col {
   width: 260px;
   display: flex;
@@ -1093,12 +701,6 @@ body[data-theme="dark"] {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.brand-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
 }
 
 .footer-brand-title {
@@ -1122,7 +724,6 @@ body[data-theme="dark"] {
   text-align: left;
 }
 
-/* 右側欄位 */
 .footer-links-grid {
   display: flex;
   gap: 48px;
@@ -1163,8 +764,90 @@ body[data-theme="dark"] {
   color: #3b82f6;
 }
 
-/* RWD 手機版調整 */
+.terms-action-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+  padding: 0 20px;
+}
+
+/* =========================================
+   11. 動畫與響應式佈局 (Keyframes & RWD)
+   ========================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); }
+  70% { box-shadow: 0 0 0 12px rgba(0, 123, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
 @media (max-width: 768px) {
+  .site-header-wrapper {
+    padding: 8px 12px;
+    overflow-x: hidden;
+  }
+
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 4px 0;
+  }
+
+  .brand-title {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .brand-logo {
+    width: 26px;
+    height: 26px;
+  }
+
+  .user-welcome {
+    font-size: 0.75rem;
+    color: var(--text-secondary, #aaa);
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-actions .btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .page-nav-tabs {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 0;
+  }
+
+  .page-nav-tabs .nav-tab {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 0;
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm, 8px);
+  }
+
   .site-footer {
     padding: 36px 0 24px;
   }
@@ -1181,5 +864,29 @@ body[data-theme="dark"] {
   .footer-links-grid {
     gap: 32px;
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-filter-container {
+    padding: 0 12px;
+    margin: 12px auto;
+  }
+
+  .filter-controls-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .filter-control {
+    height: 38px;
+    font-size: 13px;
+    padding: 0 6px;
+  }
+
+  .nearest-port-container {
+    padding: 0 12px;
+    margin-top: 12px;
   }
 }

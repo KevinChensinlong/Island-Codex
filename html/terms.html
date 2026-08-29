@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>使用條款</title>
+
+    <!-- 1. 網頁頁籤圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="../images/icon-192.jpg">
+    <!-- 2. Apple iOS 裝置主畫面圖示 -->
+    <link rel="apple-touch-icon" href="../images/icon-192.jpg">
+
+    <!-- 全域 CSS 樣式 -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/home.css">
+
+    <!-- 引入 PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#007bff">
+
+    <!-- iOS (Safari) 專用設定 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="島嶼圖鑑">
+
+    <style>
+        /* 隱藏左上角的分類切換按鈕區塊 */
+        .category-tabs,
+        .tab-buttons,
+        .sub-nav {
+            display: none !important;
+        }
+
+        /* 移除 details 展開時的藍色邊框 */
+        .faq-list .faq-item[open] {
+            border-color: #e2e8f0 !important;
+        }
+
+        /* 若在深色模式下，維持深色邊框 */
+        [data-theme="dark"] .faq-list .faq-item[open] {
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        /* 返回首頁按鈕專用樣式 */
+        .btn-back-home {
+            display: inline-block;
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            margin-top: 20px;
+        }
+
+        .btn-back-home:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- 獨立頁首 -->
+        <div id="header-container"></div>
+
+        <!-- 主要內容區 -->
+        <main class="home-main">
+            <!-- 1. Hero 區塊 -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">Terms of Use</div>
+                    <h1 class="hero-title">使用條款</h1>
+                    <p class="hero-subtitle">歡迎使用島嶼圖鑑，請在使用本平台前仔細閱讀以下使用條款與條例。</p>
+                </div>
+            </section>
+
+            <!-- 2. 使用條款詳細內容模組 -->
+            <section class="home-section">
+                <h2 class="section-title">服務使用協定</h2>
+                <p class="section-desc">本條款旨在保障平台使用者與維護者的權益，當您開始使用本平台時即表示同意以下條款。</p>
+
+
+                <div class="faq-list">
+                    <details class="faq-item" open>
+                        <summary class="faq-question">1. 使用條款的接受</summary>
+                        <div class="faq-answer">
+                            <p>這些使用條款由你與 島嶼圖鑑 Island Codex（「我們」）訂立。以下條款與條件，以及任何明確引用並納入的文件（統稱為「內容規範」），規範你存取與使用島嶼圖鑑 Island
+                                Condex（本平台）提供的任何內容、功能與服務（統稱為「服務」），無論你是訪客或註冊用戶。</p>
+                            <p>在開始使用服務之前，請仔細閱讀這些使用條款。透過存取或使用服務，即表示你接受並同意受這些使用條款、我們的隱私政策、著作權政策，以及中華民國法規的約束並遵守之。若你不願意同意這些條款與政策，你必須停止存取或使用服務。
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">2. 使用條款的變更</summary>
+                        <div class="faq-answer">
+                            <p>我們可能會不時依自行裁量修訂並更新這些使用條款。所有變更在我們公布時立即生效，並適用於此後所有對服務的存取與使用。</p>
+                            <p>在公布修訂後，你持續使用服務即表示你接受並同意這些變更。你應在每次存取服務時檢查本頁面，以便了解任何變更，因為這些變更對你具有拘束力。</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">3. 存取服務與帳戶安全</summary>
+                        <div class="faq-answer">
+                            <p>我們保留撤回或修改服務，以及透過服務提供的任何服務或資料的權利，並可依我們的自行裁量在未事先通知的情況下進行。我們不對任何原因導致全部或部分服務在任何時間或期間無法使用負責。我們可能會不時限制部分服務或整個服務的存取，包括對註冊用戶的限制。
+                            </p>
+                            <p>你有責任自行安排並確保能夠存取服務，並確保所有透過你的網路連線存取服務的人都知悉並遵守這些使用條款。</p>
+                            <p>若要存取服務或其提供的部分資源，你可能需要提供某些註冊資料或其他資訊。使用服務的前提是你在服務上提供的所有資訊必須正確、最新且完整。你同意所有你為註冊或其他用途提供的資訊（包括但不限於透過服務的任何互動功能提供的資訊）均受我們的隱私政策規範，並同意我們依隱私政策對你的資訊採取的所有行動。
+                            </p>
+                            <p>如果你選擇或被提供電子郵件、密碼或其他作為我們安全程序一部分的資訊，你必須將這些資訊視為機密，不得向任何其他人或實體透露。你也承認你的帳戶僅限於你本人使用，並同意不得讓其他人使用你的使用者名稱、密碼或其他安全資訊存取服務或其部分內容（若你這麼做，你同意對該人造成的任何損害負責，並賠償、抗辯並使我們免於承擔責任）。你同意立即通知我們任何未經授權的使用者名稱或密碼存取，或任何其他安全漏洞。當你在公共或共用電腦上存取帳戶時，應特別謹慎，以避免他人查看或記錄你的密碼或其他個人資訊。
+                            </p>
+                            <p>我們有權在任何時間依我們的自行裁量，基於任何理由或無理由，停用任何使用者名稱、密碼或其他識別資訊，不論是由你選擇或由我們提供，包括在我們認為你違反這些使用條款的任何規定時。
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">4. 智慧財產權</summary>
+                        <div class="faq-answer">
+                            <p>除本平台所調用的資料外，服務及其全部內容、功能與特性（包括但不限於所有資訊、軟體、文字、顯示、圖片、影片與音訊，以及其設計、選擇與編排），均由本公司、其授權人或其他提供該等資料的單位所有，並受中華民國及國際著作權、商標、專利、商業秘密及其他智慧財產或專有權利法律的保護。
+                            </p>
+                            <p>這些使用條款僅允許你將服務用於個人、非商業用途。</p>
+                            <p>你不會因使用服務而取得任何權利、所有權或利益，服務或其內容中的所有權利均由我們保留，除非使用條款明確授予。任何未經使用條款明確允許的使用，均屬違反使用條款，並可能違反著作權、商標及其他法律。
+                            </p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">5. 商標規範</summary>
+                        <div class="faq-answer">
+                            <p>所有商標皆為本平台所有，受智慧財產權保障，未經許可不可對外宣稱代表或是擅自用於其他平台或實體場域。</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">6. 禁止事項</summary>
+                        <div class="faq-answer">
+                            <p>您有義務在使用本平台時，遵守以下事項：</p>
+                            <p>1. 不得違法本平台所有內容規範。</p>
+                            <p>2. 不得傷害未成年人。</p>
+                            <p>3. 不得散布垃圾郵件、病毒或進行攻擊本平台所屬伺服器。</p>
+                            <p>4. 不得利用服務訓練 AI 模型。</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">7. 使用者貢獻</summary>
+                        <div class="faq-answer">
+                            <p>您所留下的內容部分屬於機密，如下規範：</p>
+                            <p>1. 帳戶</p>
+                            <p>2. 密碼</p>
+                            <p>3. 筆記</p>
+                            <p>以下部分屬於非機密，如下規範：</p>
+                            <p>1. 暱稱</p>
+                            <p>2. 打卡紀錄</p>
+                            <p>上述機密內容本平台有義務積極保障，不外洩且不用於修改、分發及廣告等。非機密內容本平台可能於網站上顯示，並由其他使用者所見，且打卡紀錄本平台有權使用、修改、分發這些內容。</p>
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
+                        <summary class="faq-question">8. 您的意見與疑慮</summary>
+                        <div class="faq-answer">
+                            <p>本網站由以下專案營運：</p>
+                            <p>島嶼圖鑑 Island Codex</p>
+                            <p>R.O.C. New Taipei City</p>
+                            <p>歡迎在 GitHub 上聯絡我們。</p>
+                        </div>
+                    </details>
+
+                    <p class="section-desc">最後修改時間：中華民國115年8月29日</p>
+
+                </div>
+            </section>
+
+            <!-- 獨立按鈕容器 -->
+            <div class="hero-actions">
+                <a href="../index.html" class="btn-back-home">返回首頁</a>
+            </div>
+        </main>
+
+        <!-- 獨立頁尾 -->
+        <div id="footer-container"></div>
+    </div>
+
+    <!-- 全域與元件腳本 -->
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/components.js"></script>
+
+    <!-- PWA Service Worker 註冊 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('../sw.js')
+                    .then(reg => console.log('Service Worker 註冊成功！', reg))
+                    .catch(err => console.error('Service Worker 註冊失敗：', err));
+            });
+        }
+    </script>
+
+    <!-- 動態生成 25% 圓角 Favicon -->
+    <script>
+        function setRoundedFavicon(iconUrl, borderRadiusRatio = 0.25) {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = iconUrl;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const size = img.width || 128;
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                const radius = size * borderRadiusRatio;
+
+                ctx.beginPath();
+                ctx.moveTo(radius, 0);
+                ctx.arcTo(size, 0, size, size, radius);
+                ctx.arcTo(size, size, 0, size, radius);
+                ctx.arcTo(0, size, 0, 0, radius);
+                ctx.arcTo(0, 0, size, 0, radius);
+                ctx.closePath();
+                ctx.clip();
+                ctx.drawImage(img, 0, 0, size, size);
+
+                let link = document.querySelector("link[rel*='icon']");
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'icon';
+                    document.head.appendChild(link);
+                }
+                link.type = 'image/png';
+                link.href = canvas.toDataURL('image/png');
+            };
+        }
+        setRoundedFavicon('../images/icon-192.jpg', 0.25);
+    </script>
+</body>
+
+</html>
