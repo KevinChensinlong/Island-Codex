@@ -15,9 +15,10 @@
     /* 移除原本的 transition 避免退出全螢幕時產生二次縮放的動畫 */
 }
 
-/* 深色模式圖層濾鏡 */
+/* 移除深色模式下的圖磚濾鏡，讓地圖保持最清晰的高辨識度原色 */
 .leaflet-tile-pane {
-    filter: var(--map-tile-filter);
+    filter: none;
+    transition: filter 0.2s ease;
 }
 
 /* 全螢幕狀態強制 100vh 覆蓋 */
@@ -65,4 +66,67 @@
 /* 未踩點：灰藍色/中性灰圓點 */
 .map-dot.unvisited-dot {
   background-color: #6c757d;
+}
+
+/* =========================================
+   地圖高質感膠囊與圓點聚合點位 (支援深淺色主題自動切換)
+   ========================================= */
+.custom-cluster-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 針對小於 10 個點的圓形/微型膠囊標記 */
+.subtle-cluster-pill {
+  height: 24px;
+  min-width: 24px;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: var(--bg-card, #ffffff);
+  color: var(--text-primary, #334155);
+  font-weight: 600;
+  font-size: 11px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+  white-space: nowrap;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subtle-cluster-pill:hover {
+  transform: scale(1.12);
+  background-color: var(--accent-color, #007bff);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 999;
+}
+
+/* 針對密集區域的高級感膠囊標記（自動適應深淺色主題） */
+.minimal-cluster-pill {
+  height: 28px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background-color: var(--bg-card, #ffffff);
+  color: var(--text-primary, #0f172a);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  border: 1.5px solid var(--accent-color, #007bff);
+  white-space: nowrap;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.minimal-cluster-pill:hover {
+  transform: scale(1.08);
+  background-color: var(--accent-color, #007bff);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  z-index: 999;
 }
