@@ -2,7 +2,7 @@
 
 {"id": "TR_station_kee_0900" ,"line": "縱貫線北段" ,"name": "基隆車站" ,"city": "基隆市仁愛區" ,"lat": 25.13191 ,"lng": 121.73837},
 {"id": "TR_station_kee_0910" ,"line": "縱貫線北段" ,"name": "三坑車站" ,"city": "基隆市仁愛區" ,"lat": 25.1223 ,"lng": 121.7422},
-{"id": "TR_station_kee_0920" ,"line": "縱貫線北段" ,"name": "八堵車站" ,"city": "基隆市暖暖區" ,"lat": 25.10838 ,"lng": 121.72904},
+{"id": "TR_station_kee_0920" ,"line": "縱貫線北段　宜蘭線" ,"name": "八堵車站" ,"city": "基隆市暖暖區" ,"lat": 25.10838 ,"lng": 121.72904},
 {"id": "TR_station_kee_0930" ,"line": "縱貫線北段" ,"name": "七堵車站" ,"city": "基隆市七堵區" ,"lat": 25.09294 ,"lng": 121.71415},
 {"id": "TR_station_kee_0940" ,"line": "縱貫線北段" ,"name": "百福車站" ,"city": "基隆市七堵區" ,"lat": 25.07795 ,"lng": 121.69379},
 {"id": "TR_station_ntpc_0950" ,"line": "縱貫線北段" ,"name": "五堵車站" ,"city": "新北市汐止區" ,"lat": 25.07799 ,"lng": 121.66758},
@@ -133,7 +133,6 @@
 {"id": "TR_station_pif_4470" ,"line": "屏東線" ,"name": "六塊厝車站" ,"city": "屏東縣屏東市" ,"lat": 22.66597 ,"lng": 120.46497},
 {"id": "TR_station_pif_5000" ,"line": "屏東線　南迴線" ,"name": "屏東車站" ,"city": "屏東縣屏東市" ,"lat": 22.669167 ,"lng": 120.485278},
 
-{"id": "TR_station_kee_0920" ,"line": "宜蘭線" ,"name": "八堵車站" ,"city": "基隆市暖暖區" ,"lat": 25.10838 ,"lng": 121.72904},
 {"id": "TR_station_kee_7390" ,"line": "宜蘭線" ,"name": "暖暖車站" ,"city": "基隆市暖暖區" ,"lat": 25.10231 ,"lng": 121.74031},
 {"id": "TR_station_ntpc_7380" ,"line": "宜蘭線" ,"name": "四腳亭車站" ,"city": "新北市瑞芳區" ,"lat": 25.10281 ,"lng": 121.76195},
 {"id": "TR_station_ntpc_7360" ,"line": "宜蘭線" ,"name": "瑞芳車站" ,"city": "新北市瑞芳區" ,"lat": 25.10861 ,"lng": 121.80596},
