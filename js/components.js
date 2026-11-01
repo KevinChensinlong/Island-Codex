@@ -73,8 +73,7 @@ function renderHeader() {
 
 // 渲染多欄位獨立頁尾
 function renderFooter() {
-  const portLink = isInHtmlDir ? 'ports.html' : 'html/ports.html';
-  const stationLink = isInHtmlDir ? 'TR_stations.html' : 'html/TR_stations.html';
+  const termsLink = isInHtmlDir ? 'terms.html' : 'html/terms.html';
 
   const footerHTML = `
     <footer class="site-footer">
@@ -95,7 +94,7 @@ function renderFooter() {
           <div class="footer-col">
             <h4 class="footer-col-title">內容規範</h4>
             <ul class="footer-links">
-              <li><a href="../html/terms.html">使用條款</a></li>
+              <li><a href="${termsLink}">使用條款</a></li>
             </ul>
           </div>
 
