@@ -265,7 +265,9 @@ function focusOnMap(lat, lng) {
   }
 }
 
-// 切換並載入維基百科資訊
+/**
+ * 切換並載入維基百科資訊（支援消歧義自動重試與備用標題）
+ */
 async function toggleWiki(spotId, spotName) {
   const wikiBox = document.getElementById(`wiki-box-${spotId}`);
   if (!wikiBox) return;
@@ -281,14 +283,45 @@ async function toggleWiki(spotId, spotName) {
     return;
   }
 
-  try {
-    const response = await fetch(`https://zh.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(spotName)}`);
+  // 尋找對應的 spot 資料，看是否有手動指定的 wikiTitle
+  const sourceData = (window.AppState && window.AppState.allPorts) || window.portsData || [];
+  const spot = sourceData.find(p => String(p.id || p.spotId) === String(spotId)) || {};
+  
+  // 嘗試查詢的候選清單：1. 自訂 wikiTitle 2. 原本的 spotName 3. 加上「 (車站)」 4. 加上「 (臺鐵)」
+  const searchCandidates = [];
+  if (spot.wikiTitle) searchCandidates.push(spot.wikiTitle);
+  searchCandidates.push(spotName);
+  if (!spotName.includes('車站')) {
+    searchCandidates.push(`${spotName}車站`);
+  }
+  searchCandidates.push(`${spotName} (車站)`);
+  searchCandidates.push(`${spotName} (臺鐵)`);
 
-    if (!response.ok) {
-      throw new Error('維基百科查無此條目');
+  let data = null;
+  let lastError = null;
+
+  // 依序嘗試查詢候選標題，直到成功為止
+  for (const title of searchCandidates) {
+    try {
+      const response = await fetch(`https://zh.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+      if (response.ok) {
+        data = await response.json();
+        // 檢查是否為消歧義頁面 (維基百科 summary API 對於消歧義頁通常 type 是 disambiguation)
+        if (data && data.type !== 'disambiguation') {
+          break; 
+        }
+      }
+    } catch (err) {
+      lastError = err;
     }
+  }
 
-    const data = await response.json();
+  if (!data || data.type === 'disambiguation') {
+    wikiBox.innerHTML = `<div class="wiki-error">無法載入維基百科簡介 (此條目存在消歧義，建議在 JSON 中指定正確名稱)</div>`;
+    return;
+  }
+
+  try {
     let wikiHTML = '';
 
     const thumbUrl = data.thumbnail?.source || null;
